@@ -1,0 +1,21 @@
+{
+  "_comment": "Exemple de format de tokens de couleurs. Remplacez ce fichier par les tokens réels de votre design system.",
+  "color": {
+    "primary": {
+      "50": "#eff6ff",
+      "500": "#3b82f6",
+      "900": "#1e3a8a"
+    },
+    "neutral": {
+      "0": "#ffffff",
+      "100": "#f5f5f5",
+      "900": "#111111"
+    },
+    "semantic": {
+      "success": "#16a34a",
+      "warning": "#d97706",
+      "danger": "#dc2626",
+      "info": "#0284c7"
+    }
+  }
+}

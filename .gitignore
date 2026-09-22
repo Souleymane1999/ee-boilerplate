@@ -1,0 +1,37 @@
+# Environment variables — never commit real secrets
+.env
+.env.*
+!.env.example
+
+# Backend (Ruby / Rails) — see backend/.gitignore for the detailed version
+backend/log/*
+!backend/log/.keep
+backend/tmp/*
+!backend/tmp/.keep
+backend/vendor/bundle/
+backend/.bundle/
+backend/config/master.key
+backend/public/assets
+backend/storage/*
+!backend/storage/.keep
+backend/coverage/
+
+# Frontend (Node)
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/coverage/
+frontend/*.local
+
+# Design system (if a real one is dropped in later, it will have its own .gitignore)
+design-system/node_modules/
+
+# Backups produced locally by scripts/backup.sh
+/backups/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
