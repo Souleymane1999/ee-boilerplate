@@ -34,10 +34,9 @@ Le premier démarrage exécute automatiquement les migrations (`db:prepare`).
 ### Sans Docker (dev local direct)
 
 ```bash
-cd backend
 bundle install
 yarn install
-cp ../.env.example .env   # ou configurer DATABASE_URL directement
+cp .env.example .env   # ou configurer DATABASE_URL directement
 bin/rails db:prepare
 bin/dev
 ```
@@ -47,14 +46,14 @@ bin/dev
 ### Lancer les tests
 
 ```bash
-docker-compose exec backend bundle exec rspec
-# ou en local : cd backend && bundle exec rspec
+docker-compose exec app bundle exec rspec
+# ou en local : bundle exec rspec
 ```
 
 ### Lint
 
 ```bash
-docker-compose exec backend bundle exec rubocop
+docker-compose exec app bundle exec rubocop
 ```
 
 ### Ajouter une feature
@@ -70,12 +69,15 @@ Détails complets : [`docs/contributing.md`](docs/contributing.md).
 
 ```
 ee-boilerplate/
-├── backend/                # L'app Rails (vues, Tailwind, Devise, RSpec, Rubocop, Brakeman)
-│   ├── app/views/devise/   # Vues Devise stylées (login, inscription...)
-│   ├── app/assets/         # Tailwind (application.tailwind.css) + builds compilés
-│   ├── app/javascript/     # Entrypoint esbuild (Turbo, Stimulus)
-│   ├── bin/dev              # Lance web + css watcher + js watcher (foreman)
-│   └── Procfile.dev
+├── app/                    # L'app Rails (controllers, models, vues)
+│   ├── views/devise/       # Vues Devise stylées (login, inscription...)
+│   ├── assets/             # Tailwind (application.tailwind.css) + builds compilés
+│   └── javascript/         # Entrypoint esbuild (Turbo, Stimulus)
+├── config/                  # Routes, initializers, credentials chiffrées
+├── spec/                    # RSpec (specs de requête, modèles)
+├── bin/dev                  # Lance web + css watcher + js watcher (foreman)
+├── Procfile.dev
+├── Gemfile / package.json   # Dépendances Ruby / JS
 ├── design-system/          # Design system de référence de l'équipe (Delta Force / iFutur), app Nuxt
 ├── docs/                   # Documentation (architecture, observabilité, sécurité, runbook...)
 │   └── adr/                # Architecture Decision Records
@@ -83,7 +85,7 @@ ee-boilerplate/
 ├── .github/
 │   ├── workflows/ci.yml    # Lint + tests + build assets + scans sécurité
 │   └── dependabot.yml      # Mises à jour hebdomadaires (bundler, yarn, actions)
-├── docker-compose.yml       # postgres + backend (un seul service applicatif)
+├── docker-compose.yml       # postgres + app (un seul service applicatif)
 ├── .env.example
 ├── DESIGN.md                 # TailwindCSS ↔ tokens du design system
 └── README.md                 # ce fichier
@@ -110,7 +112,7 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 | Contrôle | État | Détail |
 |---|---|---|
 | Fonctionnalités critiques testées | ✅ | Auth (inscription/connexion/déconnexion, accès protégé), health check |
-| Couverture de code mesurée | ✅ | SimpleCov — rapport dans `backend/coverage/` |
+| Couverture de code mesurée | ✅ | SimpleCov — rapport dans `coverage/` |
 | Tests d'intégration sur les parcours critiques | ✅ | Specs de requête RSpec (`spec/requests/`) ; pas d'E2E navigateur (Capybara + système) — à ajouter si le projet en a besoin |
 | Lint / analyse statique configuré | ✅ | Rubocop |
 | Tests instables identifiés et suivis | ➖ | Process à instaurer une fois qu'il y a un historique de CI réel |
@@ -196,7 +198,7 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 |---|---|---|
 | Composants partagés réutilisés | ✅ | Vues Devise (login, inscription) stylées directement avec les classes Tailwind iFutur |
 | Design system / bibliothèque UI utilisé | ✅ | TailwindCSS + tokens iFutur |
-| Tokens de design centralisés | ✅ | `backend/app/assets/stylesheets/application.tailwind.css` (`@theme`), synchronisé à la main avec `design-system/colors_and_type.css` — voir `DESIGN.md` |
+| Tokens de design centralisés | ✅ | `app/assets/stylesheets/application.tailwind.css` (`@theme`), synchronisé à la main avec `design-system/colors_and_type.css` — voir `DESIGN.md` |
 | Composants communs documentés | ✅ | `design-system/README.md` + UI kits Nuxt (référence visuelle) |
 | Interface respecte les conventions iFutur | ✅ | Couleurs/typo appliquées dans les vraies vues (login, dashboard) |
 | Accessibilité prise en compte | 🔲 | Pas de lint a11y automatisé côté ERB (contrairement à un projet React avec `eslint-plugin-jsx-a11y`) — vérification manuelle recommandée |
@@ -213,7 +215,7 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 - [`docs/contributing.md`](docs/contributing.md) — convention de commits, process de PR
 - [`docs/incident-response.md`](docs/incident-response.md) — sévérités, triage, post-mortem
 - [`design-system/README.md`](design-system/README.md) — design system Delta Force / iFutur (tokens, UI kits, app Nuxt de référence)
-- [`DESIGN.md`](DESIGN.md) — comment Tailwind (backend) se rattache aux tokens du design system
+- [`DESIGN.md`](DESIGN.md) — comment Tailwind se rattache aux tokens du design system
 - [`docs/adr/`](docs/adr/) — Architecture Decision Records
 
 ## Comment démarrer un nouveau projet à partir de ce boilerplate
@@ -224,9 +226,9 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
    cd mon-nouveau-projet
    ```
 
-2. **Chercher/remplacer le placeholder de nom de projet.** Ce boilerplate utilise `backend` / `ee-boilerplate` comme noms par défaut (nom de l'app Rails, nom des bases de données). Remplacer partout par le nom réel du projet, notamment dans :
-   - `backend/config/database.yml` (noms des bases `backend_development`, `backend_test`, `backend_production`)
-   - `backend/config/application.rb` (`module Backend`)
+2. **Chercher/remplacer le placeholder de nom de projet.** Ce boilerplate utilise `backend` / `ee-boilerplate` comme noms par défaut (nom du module Rails, nom des bases de données). Remplacer partout par le nom réel du projet, notamment dans :
+   - `config/database.yml` (noms des bases `backend_development`, `backend_test`, `backend_production`)
+   - `config/application.rb` (`module Backend`)
    - `.env.example` / `.env` (`POSTGRES_DB`, etc.)
    - `README.md` lui-même (titre, description)
 
@@ -237,7 +239,6 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 
 3. **Régénérer la clé de credentials Rails** (ne pas réutiliser celle du boilerplate) :
    ```bash
-   cd backend
    rm config/master.key config/credentials.yml.enc
    EDITOR="code --wait" bin/rails credentials:edit   # régénère les deux fichiers
    ```

@@ -6,20 +6,20 @@ Savoir en temps réel si l'application fonctionne correctement, être alerté av
 
 ## 1. Suivi des erreurs — Sentry
 
-### Backend (Rails)
-- Gems : `sentry-ruby`, `sentry-rails` (voir `backend/Gemfile`).
-- Configuration : `backend/config/initializers/sentry.rb`.
+### Rails
+- Gems : `sentry-ruby`, `sentry-rails` (voir `Gemfile`).
+- Configuration : `config/initializers/sentry.rb`.
 - Le DSN est lu depuis la variable d'environnement `SENTRY_DSN`.
 - **Si `SENTRY_DSN` est absent, Sentry ne s'initialise pas** (no-op) — utile en dev/local sans bloquer.
 
 Pour l'activer :
 1. Créer un projet sur [sentry.io](https://sentry.io) (ou une instance self-hosted).
 2. Copier le DSN dans `.env` (`SENTRY_DSN=https://...`).
-3. Redémarrer le backend.
+3. Redémarrer l'app.
 
 ## 2. Logs structurés
 
-- `lograge` est configuré côté Rails (`backend/config/initializers/lograge.rb`) pour émettre un log JSON par requête (méthode, path, status, durée, params filtrés) au lieu du format multi-lignes par défaut.
+- `lograge` est configuré côté Rails (`config/initializers/lograge.rb`) pour émettre un log JSON par requête (méthode, path, status, durée, params filtrés) au lieu du format multi-lignes par défaut.
 - En production, envoyer ces logs vers un agrégateur (CloudWatch Logs, Datadog Logs, Loki, ELK...) via le driver de logs du conteneur/orchestrateur plutôt que de gérer la rotation manuellement.
 
 ## 3. Brancher un APM (Datadog ou équivalent)

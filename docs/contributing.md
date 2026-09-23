@@ -15,14 +15,14 @@ Première fois : voir la section "Quickstart" du `README.md` racine pour la cré
 ## Lancer les tests localement
 
 ```bash
-docker-compose exec backend bundle exec rspec
+docker-compose exec app bundle exec rspec
 ```
 
-Ou sans Docker, directement dans `backend/` avec Ruby/Node installés localement (`bundle exec rspec`).
+Ou sans Docker, directement à la racine du repo avec Ruby/Node installés localement (`bundle exec rspec`).
 
 ## Style de code
 
-- Rubocop (`bundle exec rubocop`). Config dans `backend/.rubocop.yml`, basée sur des règles raisonnables (pas de style ultra-strict pour ne pas freiner l'équipe).
+- Rubocop (`bundle exec rubocop`). Config dans `.rubocop.yml`, basée sur des règles raisonnables (pas de style ultra-strict pour ne pas freiner l'équipe).
 - Le lint tourne aussi en CI (`ci.yml`) — une PR avec du lint qui échoue ne peut pas être mergée.
 
 ## Convention de commits

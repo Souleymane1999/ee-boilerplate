@@ -6,26 +6,19 @@ on:
   pull_request:
 
 jobs:
-  backend-lint:
+  lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2.2"
           bundler-cache: true
-          working-directory: backend
       - name: Rubocop
         run: bundle exec rubocop
 
-  backend-test:
+  test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     services:
       postgres:
         image: postgres:16-alpine
@@ -49,12 +42,10 @@ jobs:
         with:
           ruby-version: "3.2.2"
           bundler-cache: true
-          working-directory: backend
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "yarn"
-          cache-dependency-path: backend/yarn.lock
       - name: Install JS dependencies
         run: yarn install --frozen-lockfile
       - name: Build assets (Tailwind CSS + esbuild)
@@ -64,18 +55,14 @@ jobs:
       - name: Run RSpec
         run: bundle exec rspec
 
-  backend-security:
+  security:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2.2"
           bundler-cache: true
-          working-directory: backend
       - name: Brakeman (static security analysis)
         run: bundle exec brakeman --no-pager
       - name: bundler-audit (known CVEs in gems)
@@ -85,6 +72,5 @@ jobs:
         with:
           node-version: "20"
           cache: "yarn"
-          cache-dependency-path: backend/yarn.lock
       - name: yarn audit (known CVEs in JS deps)
         run: yarn install --frozen-lockfile && yarn audit --level high

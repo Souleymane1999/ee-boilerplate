@@ -10,7 +10,7 @@
 ### Étapes types (à adapter à votre plateforme : Render, Fly.io, Heroku, ECS, Kubernetes...)
 
 1. CI verte sur la branche/PR à déployer (`ci.yml` : lint, tests, build des assets, scans sécurité).
-2. Build de l'image (`backend/Dockerfile.production` — inclut la compilation Tailwind CSS + esbuild JS via `assets:precompile`) ou build de la plateforme.
+2. Build de l'image (`Dockerfile.production` — inclut la compilation Tailwind CSS + esbuild JS via `assets:precompile`) ou build de la plateforme.
 3. Déploiement de l'app :
    - `bin/rails db:migrate` (idéalement dans un job de pré-déploiement, pas dans le process web).
    - Démarrage des nouvelles instances, health check sur `/up` avant bascule du trafic.
@@ -51,10 +51,10 @@
 docker-compose up
 
 # Lancer les migrations
-docker-compose exec backend bin/rails db:migrate
+docker-compose exec app bin/rails db:migrate
 
 # Ouvrir une console Rails
-docker-compose exec backend bin/rails console
+docker-compose exec app bin/rails console
 
 # Voir les logs backend en direct
 docker-compose logs -f backend

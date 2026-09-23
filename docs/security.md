@@ -6,7 +6,7 @@
 Aucun secret (clé API, mot de passe, token, `master.key`) ne doit jamais être commité dans git.
 
 ### En local
-- `backend/config/master.key` et `backend/config/credentials.yml.enc` : le `master.key` **n'est jamais commité** (voir `.gitignore` à la racine et dans `backend/`). `credentials.yml.enc` peut être commité (il est chiffré), mais sa clé de déchiffrement (`master.key` ou `RAILS_MASTER_KEY`) ne l'est jamais.
+- `config/master.key` et `config/credentials.yml.enc` : le `master.key` **n'est jamais commité** (voir `.gitignore`). `credentials.yml.enc` peut être commité (il est chiffré), mais sa clé de déchiffrement (`master.key` ou `RAILS_MASTER_KEY`) ne l'est jamais.
 - Toutes les variables d'environnement locales vivent dans `.env` (jamais commité — voir `.env.example` pour la liste documentée des variables attendues, sans valeurs réelles).
 
 ### En CI/CD (GitHub Actions)
@@ -23,13 +23,13 @@ Aucun secret (clé API, mot de passe, token, `master.key`) ne doit jamais être 
 
 ```bash
 # Éditer les credentials chiffrés (ouvre un éditeur)
-cd backend && EDITOR="code --wait" bin/rails credentials:edit
+EDITOR="code --wait" bin/rails credentials:edit
 
 # En CI, injecter la clé via l'env plutôt que de committer master.key
 RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
 ```
 
-**Exemple concret dans ce boilerplate** : `secret_key_base` (qui signe les cookies de session, y compris ceux de Devise) vit dans `backend/config/credentials.yml.enc` — généré automatiquement par Rails, jamais en clair. L'authentification est gérée par sessions Devise standard (cookies signés côté serveur), pas par un token à transporter côté client.
+**Exemple concret dans ce boilerplate** : `secret_key_base` (qui signe les cookies de session, y compris ceux de Devise) vit dans `config/credentials.yml.enc` — généré automatiquement par Rails, jamais en clair. L'authentification est gérée par sessions Devise standard (cookies signés côté serveur), pas par un token à transporter côté client.
 
 ## Scans automatisés (CI)
 
@@ -48,6 +48,6 @@ RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
 
 ## Autres bonnes pratiques appliquées dans ce boilerplate
 
-- `.gitignore` couvre `.env`, `*.key`, `node_modules/`, `log/`, `tmp/`, `backend/config/master.key`, `coverage/`.
+- `.gitignore` couvre `.env`, `*.key`, `node_modules/`, `log/`, `tmp/`, `config/master.key`, `coverage/`.
 - Protection CSRF standard Rails active par défaut (`ActionController::Base`) — les formulaires Devise l'utilisent nativement.
 - Les vues ERB échappent le HTML par défaut (`<%= %>`) ; n'utiliser `<%== %>`/`raw`/`html_safe` que sur du contenu de confiance.

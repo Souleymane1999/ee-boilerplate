@@ -16,9 +16,9 @@ services:
       timeout: 5s
       retries: 10
 
-  backend:
+  app:
     build:
-      context: ./backend
+      context: .
     restart: unless-stopped
     depends_on:
       postgres:
@@ -31,13 +31,13 @@ services:
     ports:
       - "${PORT:-3000}:3000"
     volumes:
-      - ./backend:/rails
-      - backend_bundle:/usr/local/bundle
-      - backend_node_modules:/rails/node_modules
+      - .:/rails
+      - app_bundle:/usr/local/bundle
+      - app_node_modules:/rails/node_modules
     command: >
       bash -c "bin/rails db:prepare && bin/dev"
 
 volumes:
   postgres_data:
-  backend_bundle:
-  backend_node_modules:
+  app_bundle:
+  app_node_modules:

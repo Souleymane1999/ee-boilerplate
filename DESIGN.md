@@ -1,25 +1,25 @@
 # Design — TailwindCSS et lien avec le design system
 
-Ce document explique comment le style de l'app (`backend/`) est construit et comment il se rattache au design system de l'équipe (`design-system/`, Delta Force / iFutur).
+Ce document explique comment le style de l'app Rails (racine du repo) est construit et comment il se rattache au design system de l'équipe (`design-system/`, Delta Force / iFutur).
 
 ## Stack de style
 
-- **TailwindCSS v4** via `cssbundling-rails` — pas de `tailwind.config.js` : la config se fait en CSS via `@theme` dans [`backend/app/assets/stylesheets/application.tailwind.css`](backend/app/assets/stylesheets/application.tailwind.css).
+- **TailwindCSS v4** via `cssbundling-rails` — pas de `tailwind.config.js` : la config se fait en CSS via `@theme` dans [`app/assets/stylesheets/application.tailwind.css`](app/assets/stylesheets/application.tailwind.css).
 - Compilé par le CLI Tailwind (`yarn build:css`), pas par un plugin de bundler — même toolchain que cadastre-niger.
-- Aucune dépendance de build entre `backend/` (Rails/ERB) et `design-system/` (Vue/Nuxt) — ce sont deux stacks différentes. Le lien est **la valeur des tokens**, recopiée à la main, pas un import de code.
+- Aucune dépendance de build entre l'app Rails (ERB) et `design-system/` (Vue/Nuxt) — ce sont deux stacks différentes. Le lien est **la valeur des tokens**, recopiée à la main, pas un import de code.
 
 ## Où vivent les tokens
 
 | Source de vérité | Fichier |
 |---|---|
 | Design system (référence, Vue/Nuxt) | [`design-system/colors_and_type.css`](design-system/colors_and_type.css) |
-| App Rails (Tailwind) | [`backend/app/assets/stylesheets/application.tailwind.css`](backend/app/assets/stylesheets/application.tailwind.css) — bloc `@theme` |
+| App Rails (Tailwind) | [`app/assets/stylesheets/application.tailwind.css`](app/assets/stylesheets/application.tailwind.css) — bloc `@theme` |
 
 Les valeurs de couleur, police et rayons dans `application.tailwind.css` sont une **copie manuelle** d'un sous-ensemble des tokens du design system (couleur de marque lime `#BBCB44`, neutres, sémantiques success/warning/danger/info, police Open Sans, rayons). Pas la totalité — seulement ce qui a été nécessaire jusqu'ici (les vues Devise, la page d'accueil, le tableau de bord).
 
 ## Garder les deux fichiers synchronisés
 
-Il n'y a pas de synchronisation automatique. Quand quelqu'un change une valeur dans `design-system/colors_and_type.css` (ex : la couleur de marque), il faut répercuter le changement à la main dans `backend/app/assets/stylesheets/application.tailwind.css`, puis relancer `yarn build:css` (ou laisser `bin/dev` le faire en watch).
+Il n'y a pas de synchronisation automatique. Quand quelqu'un change une valeur dans `design-system/colors_and_type.css` (ex : la couleur de marque), il faut répercuter le changement à la main dans `app/assets/stylesheets/application.tailwind.css`, puis relancer `yarn build:css` (ou laisser `bin/dev` le faire en watch).
 
 ## Ce qui n'est PAS branché automatiquement
 

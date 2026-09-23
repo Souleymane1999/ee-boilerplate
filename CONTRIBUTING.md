@@ -10,6 +10,6 @@ docker-compose up
 ```
 
 - App : http://localhost:3000
-- Tests : `docker-compose exec backend bundle exec rspec`
+- Tests : `docker-compose exec app bundle exec rspec`
 
 Commits au format [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, ...). CI (lint + tests + build + scans sécurité) doit être verte avant tout merge.

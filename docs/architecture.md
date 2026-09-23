@@ -6,7 +6,7 @@ Ce boilerplate suit une architecture **monolithe Rails server-rendered**, sans f
 
 ```
 ┌────────────────────────────────────────┐
-│              Rails (backend/)            │
+│                 Rails                    │
 │  Vues ERB + Turbo/Stimulus + Tailwind    │
 │              Port 3000                   │
 └───────────────────┬──────────────────────┘
@@ -22,7 +22,7 @@ Pas d'API JSON séparée à sécuriser, pas de CORS, pas de token à transporter
 
 ## Composants
 
-### App (`backend/`)
+### App Rails (racine du repo)
 - Rails 7.2 classique (vues activées, asset pipeline via Propshaft).
 - **TailwindCSS v4** compilé par `cssbundling-rails` (CLI Tailwind), **esbuild** pour le JS via `jsbundling-rails` — voir `DESIGN.md`.
 - **Hotwire** (Turbo + Stimulus) pour la navigation et l'interactivité sans recharger toute la page, sans construire une SPA.
@@ -44,7 +44,7 @@ Pas d'API JSON séparée à sécuriser, pas de CORS, pas de token à transporter
 
 ## Design system
 
-`design-system/` est le **design system de référence** de l'équipe (Delta Force / iFutur) : tokens (couleurs, typographie), UI kits web/mobile, app Nuxt de démonstration. Ce n'est **pas** une dépendance de build de `backend/` — c'est une référence visuelle que l'on recopie à la main dans les vues Tailwind (voir `DESIGN.md`).
+`design-system/` est le **design system de référence** de l'équipe (Delta Force / iFutur) : tokens (couleurs, typographie), UI kits web/mobile, app Nuxt de démonstration. Ce n'est **pas** une dépendance de build de l'app Rails — c'est une référence visuelle que l'on recopie à la main dans les vues Tailwind (voir `DESIGN.md`).
 
 ## Observabilité
 

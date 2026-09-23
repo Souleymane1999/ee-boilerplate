@@ -40,3 +40,15 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Not needed inside the app image — this repo also holds a reference design
+# system and docs/scripts alongside the Rails app now that it lives at the
+# repo root (no more backend/ subdirectory).
+/design-system
+/docs
+/scripts
+/README.md
+/DESIGN.md
+/CONTRIBUTING.md
+/docker-compose.yml
+/.env.example
