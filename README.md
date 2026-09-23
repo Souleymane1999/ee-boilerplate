@@ -27,6 +27,7 @@ docker-compose up
 - Frontend : http://localhost:5173
 - Backend (API) : http://localhost:3000 (health check : `GET /up`)
 - PostgreSQL : localhost:5432
+- Design system (Nuxt) : http://localhost:4000 — voir [`design-system/README.md`](design-system/README.md#démarrer) (pas lancé par `docker-compose up`, à démarrer séparément avec `cd design-system/nuxt-app && npm install && npm run dev`)
 
 Le premier démarrage exécute automatiquement les migrations (`db:prepare`).
 

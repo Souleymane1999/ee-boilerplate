@@ -27,12 +27,14 @@ No codebase, Figma, or full brand guideline was provided. Everything else in thi
 
 The implementation-ready app now lives in `nuxt-app/`. It ports the original static React/Babel design-system browser to Nuxt 3 + Vue 3 while preserving the same navigation groups, UI kits, mock data, tokens, logo assets, and client-side auth flow.
 
-Run it locally:
+Run it locally (from `design-system/nuxt-app/`):
 
 ```bash
 npm install
 npm run dev
 ```
+
+Serves on **http://localhost:4000** (pinned in `package.json`'s `dev` script) — deliberately not 3000, which is already used by this boilerplate's Rails backend.
 
 Build it for production:
 
