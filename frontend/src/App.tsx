@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchHealth } from "./lib/api";
+import LoginPage from "./LoginPage";
+import { fetchHealth, logoutUser, type AuthUser } from "./lib/api";
 
 type Status = "loading" | "ok" | "error";
 
@@ -15,12 +16,8 @@ const badgeLabels: Record<Status, string> = {
   error: "Backend indisponible",
 };
 
-/**
- * Minimal example component demonstrating a call to the Rails API
- * backend's health check endpoint (GET /up), styled with Tailwind using
- * the design system's brand tokens (see DESIGN.md).
- */
 function App() {
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<Status>("loading");
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
@@ -35,11 +32,36 @@ function App() {
       });
   }, []);
 
+  async function handleLogout() {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      await logoutUser(token).catch(() => {
+        // Best-effort revocation — the token still gets dropped locally below.
+      });
+    }
+    localStorage.removeItem("auth_token");
+    setUser(null);
+  }
+
+  if (!user) {
+    return <LoginPage onLoginSuccess={setUser} />;
+  }
+
   return (
     <div className="mx-auto max-w-xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-brand-ink">EE Boilerplate</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-brand-ink">EE Boilerplate</h1>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50"
+        >
+          Se déconnecter
+        </button>
+      </div>
       <p className="mt-2 text-neutral-600">
-        Frontend React + Vite + TypeScript, connecté à un backend Rails API.
+        Connecté en tant que <span className="font-medium">{user.email}</span>
+        .
       </p>
 
       <div className="mt-4 rounded-lg border border-neutral-200 p-6">

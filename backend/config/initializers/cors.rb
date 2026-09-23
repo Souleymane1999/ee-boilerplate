@@ -13,6 +13,10 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
     resource '*',
              headers: :any,
-             methods: %i[get post put patch delete options head]
+             methods: %i[get post put patch delete options head],
+             # devise-jwt returns the token in the Authorization response
+             # header — without exposing it, browser JS (fetch) can't read
+             # it cross-origin even though the header is present on the wire.
+             expose: ['Authorization']
   end
 end
