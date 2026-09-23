@@ -313,28 +313,4 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-
-  # ==> JWT (devise-jwt) — API-only authentication
-  # Secret comes from Rails credentials in production; falls back to ENV for local/dev
-  # so this boilerplate boots without requiring `rails credentials:edit` first.
-  config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise_jwt_secret_key || ENV.fetch('DEVISE_JWT_SECRET_KEY', nil)
-    jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
-    ]
-    jwt.revocation_requests = [
-      ['DELETE', %r{^/logout$}]
-    ]
-    jwt.expiration_time = 30.minutes.to_i
-  end
-
-  # Return JSON (not an HTML redirect) when authentication fails — this is an
-  # API-only backend with no views to redirect to.
-  config.warden do |warden_config|
-    warden_config.failure_app = JsonFailureApp
-    # devise-jwt registers the :jwt Warden strategy but does not wire it up
-    # automatically — without this, current_user/authenticate_user! never
-    # even try to decode the Authorization header.
-    warden_config.default_strategies(scope: :user).unshift :jwt
-  end
 end

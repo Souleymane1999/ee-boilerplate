@@ -1,0 +1,12 @@
+<% content_for :title, "EE Boilerplate" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center bg-neutral-25 px-4 text-center">
+  <%= image_tag "ifutur-logo.png", alt: "iFutur", class: "h-10 w-auto" %>
+  <h1 class="mt-6 text-2xl font-bold text-brand-ink">EE Boilerplate</h1>
+  <p class="mt-2 max-w-sm text-neutral-600">
+    Une app Rails avec Tailwind, prête à l'emploi — CI/CD, tests, observabilité, sécurité et authentification déjà configurés.
+  </p>
+
+  <%= link_to "Se connecter", new_user_session_path,
+        class: "mt-6 rounded-md border border-brand-lime-600 bg-brand-lime px-5 py-2.5 text-sm font-semibold text-brand-ink shadow-[0_1px_0_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.25)] transition-colors hover:bg-brand-lime-600 active:bg-brand-lime-700" %>
+</div>

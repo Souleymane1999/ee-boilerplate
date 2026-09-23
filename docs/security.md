@@ -29,26 +29,25 @@ cd backend && EDITOR="code --wait" bin/rails credentials:edit
 RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
 ```
 
-**Exemple concret dans ce boilerplate** : le secret qui signe les JWT (`devise_jwt_secret_key`) vit dans `backend/config/credentials.yml.enc` — c'est la source canonique, lue en premier (`config/initializers/devise.rb`). La variable d'env `DEVISE_JWT_SECRET_KEY` (`.env.example`) n'est qu'un fallback pratique pour un développeur qui n'a pas encore le `master.key` de l'équipe ; elle ne doit jamais contenir la vraie valeur de prod. En clonant ce repo, un nouveau développeur a deux options : récupérer le `master.key` partagé par l'équipe (accès aux vrais credentials), ou tourner en local avec son propre `DEVISE_JWT_SECRET_KEY` généré via `bin/rails secret`.
+**Exemple concret dans ce boilerplate** : `secret_key_base` (qui signe les cookies de session, y compris ceux de Devise) vit dans `backend/config/credentials.yml.enc` — généré automatiquement par Rails, jamais en clair. L'authentification est gérée par sessions Devise standard (cookies signés côté serveur), pas par un token à transporter côté client.
 
 ## Scans automatisés (CI)
 
 - **Brakeman** : analyse statique de sécurité pour Rails (détecte SQL injection, XSS, mass assignment non protégé, etc.). Lancé à chaque push/PR dans `ci.yml`.
 - **bundler-audit** : vérifie les gems du `Gemfile.lock` contre la base CVE connue.
-- **npm audit** : vérifie les dépendances npm du frontend contre les vulnérabilités connues.
-- **Dependabot** (`.github/dependabot.yml`) : ouvre automatiquement des PRs hebdomadaires pour mettre à jour les dépendances (bundler, npm, GitHub Actions) — y compris les correctifs de sécurité.
+- **yarn audit** : vérifie les dépendances JS (Tailwind CLI, esbuild) contre les vulnérabilités connues.
+- **Dependabot** (`.github/dependabot.yml`) : ouvre automatiquement des PRs hebdomadaires pour mettre à jour les dépendances (bundler, yarn, GitHub Actions) — y compris les correctifs de sécurité.
 
 ## Checklist sécurité rapide avant chaque déploiement
 
 - [ ] `bundle audit check` et `brakeman` passent sans finding critique non justifié.
-- [ ] `npm audit` ne remonte pas de vulnérabilité `high`/`critical` non résolue.
+- [ ] `yarn audit` ne remonte pas de vulnérabilité `high`/`critical` non résolue.
 - [ ] Aucun secret en dur dans le code (grep rapide sur `password`, `secret`, `api_key`, `token`).
-- [ ] CORS configuré strictement (pas de `*` en prod côté `rack-cors`).
 - [ ] HTTPS forcé en production (`config.force_ssl = true`).
 - [ ] Rate limiting sur les endpoints sensibles (login, reset password) si applicable.
 
 ## Autres bonnes pratiques appliquées dans ce boilerplate
 
 - `.gitignore` couvre `.env`, `*.key`, `node_modules/`, `log/`, `tmp/`, `backend/config/master.key`, `coverage/`.
-- Rails API mode désactive par défaut les vecteurs XSS liés aux vues (pas de rendu HTML côté serveur).
-- `rack-cors` doit être configuré explicitement avec la liste des origines autorisées (`FRONTEND_URL`) plutôt qu'un wildcard.
+- Protection CSRF standard Rails active par défaut (`ActionController::Base`) — les formulaires Devise l'utilisent nativement.
+- Les vues ERB échappent le HTML par défaut (`<%= %>`) ; n'utiliser `<%== %>`/`raw`/`html_safe` que sur du contenu de confiance.

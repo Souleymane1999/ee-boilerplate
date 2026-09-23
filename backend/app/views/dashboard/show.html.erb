@@ -1,0 +1,24 @@
+<% content_for :title, "Tableau de bord — EE Boilerplate" %>
+
+<div class="mx-auto max-w-xl px-4 py-8">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-brand-ink">EE Boilerplate</h1>
+    <%= button_to "Se déconnecter", destroy_user_session_path, method: :delete,
+          class: "cursor-pointer rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50" %>
+  </div>
+  <p class="mt-2 text-neutral-600">
+    Connecté en tant que <span class="font-medium"><%= current_user.email %></span>.
+  </p>
+
+  <div class="mt-4 rounded-lg border border-neutral-200 p-6">
+    <h2 class="text-lg font-semibold text-brand-ink">Statut de l'application</h2>
+    <p class="mt-2">
+      <span class="inline-block rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-success">
+        Base de données connectée
+      </span>
+    </p>
+    <p class="mt-2 text-sm text-neutral-500">
+      Health check disponible sur <code class="rounded bg-neutral-100 px-1 py-0.5 font-mono text-xs"><%= rails_health_check_path %></code>.
+    </p>
+  </div>
+</div>

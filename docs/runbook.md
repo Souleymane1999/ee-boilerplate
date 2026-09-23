@@ -9,14 +9,12 @@
 
 ### Étapes types (à adapter à votre plateforme : Render, Fly.io, Heroku, ECS, Kubernetes...)
 
-1. CI verte sur la branche/PR à déployer (`ci.yml` : lint, tests, build, scans sécurité).
-2. Build des images Docker (`backend/Dockerfile`, `frontend/Dockerfile`) ou build de la plateforme.
-3. Déploiement du backend :
+1. CI verte sur la branche/PR à déployer (`ci.yml` : lint, tests, build des assets, scans sécurité).
+2. Build de l'image (`backend/Dockerfile.production` — inclut la compilation Tailwind CSS + esbuild JS via `assets:precompile`) ou build de la plateforme.
+3. Déploiement de l'app :
    - `bin/rails db:migrate` (idéalement dans un job de pré-déploiement, pas dans le process web).
    - Démarrage des nouvelles instances, health check sur `/up` avant bascule du trafic.
-4. Déploiement du frontend :
-   - `npm run build` → artefacts statiques servis par un CDN/serveur statique.
-5. Vérification post-déploiement (smoke test) :
+4. Vérification post-déploiement (smoke test) :
    - `GET /up` répond 200.
    - Un parcours critique fonctionne (ex. login, lecture d'une ressource clé).
    - Pas de pic d'erreurs Sentry dans les 10 minutes suivant le déploiement.

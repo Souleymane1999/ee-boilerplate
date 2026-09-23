@@ -11,8 +11,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.2]
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
 
-      ## JWT (devise-jwt) — used to revoke individual tokens
-      t.string :jti, null: false
+      ## Rememberable
+      t.datetime :remember_created_at
 
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
@@ -37,7 +37,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.2]
 
     add_index :users, :email,                unique: true
     add_index :users, :reset_password_token, unique: true
-    add_index :users, :jti,                  unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
   end

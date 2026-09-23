@@ -29,15 +29,24 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-gem "rack-cors"
+# Modern asset pipeline — `rails new --api` skips this entirely, but a
+# server-rendered app needs it to serve the compiled Tailwind CSS / esbuild JS.
+gem "propshaft"
+
+# Hotwire — SPA-like navigation and interactivity without a separate
+# frontend app (same pattern as cadastre-niger).
+gem "turbo-rails"
+gem "stimulus-rails"
+
+# Bundle CSS (TailwindCSS) and JS (esbuild) — same toolchain as cadastre-niger.
+gem "cssbundling-rails"
+gem "jsbundling-rails"
 
 # Load environment variables from .env in development
 gem "dotenv-rails", groups: [:development, :test]
 
-# Authentication
+# Authentication — session-based (this is a server-rendered app, not an API)
 gem "devise"
-gem "devise-jwt"
 
 # Error tracking
 gem "sentry-ruby"

@@ -50,6 +50,15 @@ jobs:
           ruby-version: "3.2.2"
           bundler-cache: true
           working-directory: backend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+          cache-dependency-path: backend/yarn.lock
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build assets (Tailwind CSS + esbuild)
+        run: yarn build:css && yarn build
       - name: Set up database
         run: bin/rails db:schema:load
       - name: Run RSpec
@@ -72,70 +81,10 @@ jobs:
       - name: bundler-audit (known CVEs in gems)
         run: |
           bundle exec bundler-audit check --update
-
-  frontend-lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - name: ESLint
-        run: npm run lint
-      - name: Prettier
-        run: npm run format:check
-
-  frontend-test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - name: Vitest
-        run: npm run test
-
-  frontend-build:
-    runs-on: ubuntu-latest
-    needs: [frontend-lint, frontend-test]
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - name: Build
-        run: npm run build
-
-  frontend-security:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - name: npm audit
-        run: npm audit --audit-level=high
+          cache: "yarn"
+          cache-dependency-path: backend/yarn.lock
+      - name: yarn audit (known CVEs in JS deps)
+        run: yarn install --frozen-lockfile && yarn audit --level high

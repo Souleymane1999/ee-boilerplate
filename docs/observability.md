@@ -17,11 +17,6 @@ Pour l'activer :
 2. Copier le DSN dans `.env` (`SENTRY_DSN=https://...`).
 3. Redémarrer le backend.
 
-### Frontend (React)
-- Package : `@sentry/react`.
-- Configuration : `frontend/src/lib/sentry.ts`, initialisée dans `main.tsx`.
-- DSN lu depuis `VITE_SENTRY_DSN`. Même comportement no-op si absent.
-
 ## 2. Logs structurés
 
 - `lograge` est configuré côté Rails (`backend/config/initializers/lograge.rb`) pour émettre un log JSON par requête (méthode, path, status, durée, params filtrés) au lieu du format multi-lignes par défaut.

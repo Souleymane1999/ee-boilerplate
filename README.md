@@ -1,21 +1,22 @@
 # EE Boilerplate — Engineering Excellence
 
-Boilerplate de départ pour tout nouveau projet de l'équipe : Rails API + React/Vite/TypeScript + PostgreSQL, avec CI/CD, tests, lint, observabilité, sauvegardes, sécurité et documentation déjà en place.
+Boilerplate de départ pour tout nouveau projet de l'équipe : **une seule app Rails** (vues serveur + Tailwind + Hotwire, pas de frontend séparé — même architecture que cadastre-niger) + PostgreSQL, avec CI/CD, tests, lint, observabilité, sauvegardes, sécurité et documentation déjà en place.
 
 **Objectif** : démarrer un nouveau projet avec un niveau Engineering Excellence élevé dès le premier commit, sans tout reconfigurer à chaque fois.
 
 ## Stack
 
-- **Backend** : Ruby on Rails 7.2 (mode API only) + PostgreSQL
-- **Frontend** : React + Vite + TypeScript
-- **Orchestration locale** : docker-compose (postgres + backend + frontend)
+- **Rails 7.2** (vues serveur, pas API-only) + **PostgreSQL**
+- **TailwindCSS v4** via `cssbundling-rails`, tokens iFutur branchés (voir [`DESIGN.md`](DESIGN.md))
+- **Hotwire** (Turbo + Stimulus) pour l'interactivité sans SPA
+- **Devise** — authentification par sessions (cookies signés), pas de JWT ni d'API séparée à sécuriser
 - **CI/CD** : GitHub Actions
 - **Observabilité** : Sentry + logs JSON structurés (lograge)
 
 ## Quickstart
 
 ### Prérequis
-- Docker et docker-compose installés
+- Docker et docker-compose installés (ou Ruby 3.2.2 + Node 20 + PostgreSQL en local)
 
 ### Démarrer
 
@@ -24,56 +25,42 @@ cp .env.example .env
 docker-compose up
 ```
 
-- Frontend : http://localhost:5173
-- Backend (API) : http://localhost:3000 (health check : `GET /up`)
+- App : http://localhost:3000 — health check : `GET /up`
 - PostgreSQL : localhost:5432
-- Design system (Nuxt) : http://localhost:4000 — voir [`design-system/README.md`](design-system/README.md#démarrer) (pas lancé par `docker-compose up`, à démarrer séparément avec `cd design-system/nuxt-app && npm install && npm run dev`)
+- Design system (référence, Nuxt) : http://localhost:4000 — voir [`design-system/README.md`](design-system/README.md#démarrer), pas lancé par `docker-compose up`
 
 Le premier démarrage exécute automatiquement les migrations (`db:prepare`).
 
 ### Sans Docker (dev local direct)
 
 ```bash
-# Backend
 cd backend
 bundle install
+yarn install
 cp ../.env.example .env   # ou configurer DATABASE_URL directement
 bin/rails db:prepare
-bin/rails server
-
-# Frontend (dans un autre terminal)
-cd frontend
-npm install
-npm run dev
+bin/dev
 ```
+
+`bin/dev` lance en parallèle (via foreman) : le serveur Rails, le watcher Tailwind CSS, et le watcher esbuild JS — un seul terminal, tout se recharge en live.
 
 ### Lancer les tests
 
 ```bash
-# Backend (RSpec)
 docker-compose exec backend bundle exec rspec
 # ou en local : cd backend && bundle exec rspec
-
-# Frontend (Vitest)
-docker-compose exec frontend npm run test
-# ou en local : cd frontend && npm run test
 ```
 
 ### Lint
 
 ```bash
-# Backend
 docker-compose exec backend bundle exec rubocop
-
-# Frontend
-docker-compose exec frontend npm run lint
-docker-compose exec frontend npm run format:check
 ```
 
 ### Ajouter une feature
 
-1. Backend : générer le modèle/controller, écrire les specs RSpec.
-2. Frontend : créer le composant, écrire un test Vitest/React Testing Library, brancher l'appel API.
+1. Générer le modèle/controller/vue Rails, écrire les specs RSpec (`type: :request` pour les parcours HTTP, `type: :model` pour la logique métier).
+2. Styliser avec les classes Tailwind + tokens iFutur (voir [`DESIGN.md`](DESIGN.md)) — pas de CSS custom sauf nécessité réelle.
 3. Vérifier lint + tests localement.
 4. Ouvrir une PR — la CI doit être verte avant merge.
 
@@ -83,19 +70,23 @@ Détails complets : [`docs/contributing.md`](docs/contributing.md).
 
 ```
 ee-boilerplate/
-├── backend/              # Rails API only + PostgreSQL (RSpec, Rubocop, Brakeman)
-├── frontend/              # React + Vite + TypeScript (Vitest, ESLint, Prettier)
-├── design-system/         # Design system de l'équipe (Delta Force / iFutur), app Nuxt incluse
-├── docs/                  # Documentation (architecture, observabilité, sécurité, runbook...)
-│   └── adr/               # Architecture Decision Records
-├── scripts/                # backup.sh / restore.sh
+├── backend/                # L'app Rails (vues, Tailwind, Devise, RSpec, Rubocop, Brakeman)
+│   ├── app/views/devise/   # Vues Devise stylées (login, inscription...)
+│   ├── app/assets/         # Tailwind (application.tailwind.css) + builds compilés
+│   ├── app/javascript/     # Entrypoint esbuild (Turbo, Stimulus)
+│   ├── bin/dev              # Lance web + css watcher + js watcher (foreman)
+│   └── Procfile.dev
+├── design-system/          # Design system de référence de l'équipe (Delta Force / iFutur), app Nuxt
+├── docs/                   # Documentation (architecture, observabilité, sécurité, runbook...)
+│   └── adr/                # Architecture Decision Records
+├── scripts/                 # backup.sh / restore.sh
 ├── .github/
-│   ├── workflows/ci.yml   # Lint + tests + build + scans sécurité
-│   └── dependabot.yml     # Mises à jour hebdomadaires (bundler, npm, actions)
-├── docker-compose.yml
+│   ├── workflows/ci.yml    # Lint + tests + build assets + scans sécurité
+│   └── dependabot.yml      # Mises à jour hebdomadaires (bundler, yarn, actions)
+├── docker-compose.yml       # postgres + backend (un seul service applicatif)
 ├── .env.example
-├── DESIGN.md               # TailwindCSS ↔ tokens du design system
-└── README.md               # ce fichier
+├── DESIGN.md                 # TailwindCSS ↔ tokens du design system
+└── README.md                 # ce fichier
 ```
 
 ## Statut Engineering Excellence
@@ -113,15 +104,15 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 | Environnements séparés (dev/staging/prod) | ➖ | Idem — pas d'infra connue à l'avance |
 | Procédure de rollback documentée et testée | 🔲 | Documentée (`docs/runbook.md`) ; "testée" suppose un vrai déploiement |
 | Smoke tests post-déploiement | ➖ | Pas de déploiement réel à ce stade |
-| Dépendances/vulnérabilités contrôlées en pipeline | ✅ | Brakeman + bundler-audit + npm audit dans `ci.yml` |
+| Dépendances/vulnérabilités contrôlées en pipeline | ✅ | Brakeman + bundler-audit + yarn audit dans `ci.yml` |
 
 ### Tests et qualité du code
 | Contrôle | État | Détail |
 |---|---|---|
-| Fonctionnalités critiques testées | ✅ | Auth (signup/login/logout/révocation JWT), health check, exemple API |
-| Couverture de code mesurée | ✅ | SimpleCov (backend) — rapport dans `backend/coverage/` |
-| Tests d'intégration sur les parcours critiques | ✅ | Specs de requête RSpec (`spec/requests/`) ; pas d'E2E navigateur (Cypress/Playwright) — à ajouter si le projet en a besoin |
-| Lint / analyse statique configuré | ✅ | Rubocop (backend), ESLint + jsx-a11y (frontend) |
+| Fonctionnalités critiques testées | ✅ | Auth (inscription/connexion/déconnexion, accès protégé), health check |
+| Couverture de code mesurée | ✅ | SimpleCov — rapport dans `backend/coverage/` |
+| Tests d'intégration sur les parcours critiques | ✅ | Specs de requête RSpec (`spec/requests/`) ; pas d'E2E navigateur (Capybara + système) — à ajouter si le projet en a besoin |
+| Lint / analyse statique configuré | ✅ | Rubocop |
 | Tests instables identifiés et suivis | ➖ | Process à instaurer une fois qu'il y a un historique de CI réel |
 | Échecs de tests visibles et traités | ✅ | La CI échoue et bloque la PR |
 | Règles de qualité appliquées avant prod | ✅ | Gate CI (lint + tests + audits) |
@@ -130,7 +121,7 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 | Contrôle | État | Détail |
 |---|---|---|
 | Logs structurés | ✅ | Lograge (JSON) |
-| Erreurs suivies avec outil dédié | ✅ | Sentry front + back (no-op si `SENTRY_DSN` vide) |
+| Erreurs suivies avec outil dédié | ✅ | Sentry (no-op si `SENTRY_DSN` vide) |
 | Métriques principales définies | 🔲 | Dépend du métier du projet réel |
 | Dashboards services critiques | ➖ | Dépend de l'outil APM choisi et de données réelles |
 | Alertes configurées | ➖ | Dépend de la plateforme d'observabilité choisie |
@@ -160,7 +151,7 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 | Décisions techniques conservées | ✅ | `docs/adr/` (Architecture Decision Records) |
 | Guide de contribution | ✅ | `CONTRIBUTING.md` |
 | Runbook opérationnel | ✅ | `docs/runbook.md` |
-| APIs documentées | 🔲 | Pas de doc OpenAPI/Swagger générée — à ajouter selon la taille de l'API réelle |
+| APIs documentées | ➖ | Pas d'API exposée par ce boilerplate (app server-rendered) — pertinent seulement si le projet en ajoute une |
 | Infos suffisantes pour la reprise par une autre équipe | ✅ | Ensemble de `docs/` |
 
 ### Staging et environnements
@@ -203,14 +194,14 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 ### Design system et expérience utilisateur
 | Contrôle | État | Détail |
 |---|---|---|
-| Composants partagés réutilisés | 🔲 | Design system existant (Vue/Nuxt) mais pas encore de composants React équivalents — voir `DESIGN.md` |
+| Composants partagés réutilisés | ✅ | Vues Devise (login, inscription) stylées directement avec les classes Tailwind iFutur |
 | Design system / bibliothèque UI utilisé | ✅ | TailwindCSS + tokens iFutur |
-| Tokens de design centralisés | ✅ | `frontend/src/index.css` (`@theme`), synchronisé à la main avec `design-system/colors_and_type.css` — voir `DESIGN.md` |
-| Composants communs documentés | ✅ | `design-system/README.md` + UI kits Nuxt |
-| Interface respecte les conventions iFutur | ✅ | Couleurs/typo appliquées dans le frontend |
-| Accessibilité prise en compte | ✅ | `eslint-plugin-jsx-a11y` actif en CI (lint automatisé — pas un audit a11y manuel complet) |
-| Parcours cohérents desktop/mobile | ➖ | Une seule page de démo à ce stade, pas encore de vrais parcours |
-| États erreur/vide/chargement gérés | ✅ | Géré dans le composant d'exemple (`loading`/`ok`/`error`) |
+| Tokens de design centralisés | ✅ | `backend/app/assets/stylesheets/application.tailwind.css` (`@theme`), synchronisé à la main avec `design-system/colors_and_type.css` — voir `DESIGN.md` |
+| Composants communs documentés | ✅ | `design-system/README.md` + UI kits Nuxt (référence visuelle) |
+| Interface respecte les conventions iFutur | ✅ | Couleurs/typo appliquées dans les vraies vues (login, dashboard) |
+| Accessibilité prise en compte | 🔲 | Pas de lint a11y automatisé côté ERB (contrairement à un projet React avec `eslint-plugin-jsx-a11y`) — vérification manuelle recommandée |
+| Parcours cohérents desktop/mobile | 🔲 | Vues actuelles responsive de base (Tailwind), pas de vrai test mobile |
+| États erreur/vide/chargement gérés | ✅ | Messages flash traduits en français, erreurs de formulaire affichées |
 
 ## Table des matières (documentation)
 
@@ -221,8 +212,8 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 - [`docs/runbook.md`](docs/runbook.md) — déploiement, rollback, logs en prod
 - [`docs/contributing.md`](docs/contributing.md) — convention de commits, process de PR
 - [`docs/incident-response.md`](docs/incident-response.md) — sévérités, triage, post-mortem
-- [`design-system/README.md`](design-system/README.md) — design system Delta Force / iFutur (tokens, UI kits, app Nuxt)
-- [`DESIGN.md`](DESIGN.md) — comment TailwindCSS (frontend) se rattache aux tokens du design system
+- [`design-system/README.md`](design-system/README.md) — design system Delta Force / iFutur (tokens, UI kits, app Nuxt de référence)
+- [`DESIGN.md`](DESIGN.md) — comment Tailwind (backend) se rattache aux tokens du design system
 - [`docs/adr/`](docs/adr/) — Architecture Decision Records
 
 ## Comment démarrer un nouveau projet à partir de ce boilerplate
@@ -233,10 +224,9 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
    cd mon-nouveau-projet
    ```
 
-2. **Chercher/remplacer le placeholder de nom de projet.** Ce boilerplate utilise `backend` / `ee-boilerplate` comme noms par défaut (nom de l'app Rails, nom du package frontend, nom des bases de données). Remplacer partout par le nom réel du projet, notamment dans :
+2. **Chercher/remplacer le placeholder de nom de projet.** Ce boilerplate utilise `backend` / `ee-boilerplate` comme noms par défaut (nom de l'app Rails, nom des bases de données). Remplacer partout par le nom réel du projet, notamment dans :
    - `backend/config/database.yml` (noms des bases `backend_development`, `backend_test`, `backend_production`)
    - `backend/config/application.rb` (`module Backend`)
-   - `frontend/package.json` (`"name": "frontend"`)
    - `.env.example` / `.env` (`POSTGRES_DB`, etc.)
    - `README.md` lui-même (titre, description)
 
@@ -268,6 +258,6 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 
 6. **Configurer les GitHub Secrets** nécessaires à la CI (`RAILS_MASTER_KEY`, `SENTRY_DSN`, etc. — voir [`docs/security.md`](docs/security.md)).
 
-7. **Adapter le design system** dans `design-system/` (voir [`design-system/README.md`](design-system/README.md)) si le nouveau projet a une identité différente d'iFutur, sinon le garder tel quel.
+7. **Adapter le design system** dans `design-system/` (voir [`design-system/README.md`](design-system/README.md)) si le nouveau projet a une identité différente d'iFutur, sinon le garder tel quel comme référence.
 
 8. Adapter `docs/architecture.md` et ce `README.md` aux spécificités réelles du nouveau projet, et commencer à développer.

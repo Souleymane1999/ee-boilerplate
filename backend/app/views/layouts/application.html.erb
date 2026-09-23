@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "EE Boilerplate" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body>
+    <%# Top-center, not top-right — a top-right toast overlaps header action
+        buttons (e.g. "Se déconnecter") that live in that same corner on most
+        pages, making them unclickable until the flash disappears. %>
+    <% if notice.present? || alert.present? %>
+      <div class="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 justify-center px-4">
+        <% if notice.present? %>
+          <p class="rounded-md bg-success-bg px-4 py-2 text-sm text-success shadow-sm"><%= notice %></p>
+        <% end %>
+        <% if alert.present? %>
+          <p class="rounded-md bg-danger-bg px-4 py-2 text-sm text-danger shadow-sm"><%= alert %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

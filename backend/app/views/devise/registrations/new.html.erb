@@ -1,0 +1,39 @@
+<% content_for :title, "Créer un compte — EE Boilerplate" %>
+
+<div class="flex min-h-screen items-center justify-center bg-neutral-25 px-4">
+  <div class="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+    <%= render "devise/shared/auth_header", title: "Créer un compte", subtitle: "Rejoignez votre espace iFutur." %>
+
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-6 flex flex-col gap-4" }) do |f| %>
+      <div class="flex flex-col gap-1.5">
+        <%= f.label :email, "Adresse email", class: "text-sm font-medium text-neutral-700" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "vous@ifutur.com",
+              class: "rounded-md border border-neutral-200 px-3 py-2 text-sm text-brand-ink shadow-[inset_0_1px_2px_rgba(14,17,16,0.06)] outline-none placeholder:text-neutral-400 focus:border-brand-lime-600 focus:ring-3 focus:ring-brand-lime/35" %>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <%= f.label :password, "Mot de passe", class: "text-sm font-medium text-neutral-700" %>
+        <% if @minimum_password_length %>
+          <span class="text-xs text-neutral-400"><%= @minimum_password_length %> caractères minimum</span>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••••",
+              class: "rounded-md border border-neutral-200 px-3 py-2 text-sm text-brand-ink shadow-[inset_0_1px_2px_rgba(14,17,16,0.06)] outline-none placeholder:text-neutral-400 focus:border-brand-lime-600 focus:ring-3 focus:ring-brand-lime/35" %>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <%= f.label :password_confirmation, "Confirmer le mot de passe", class: "text-sm font-medium text-neutral-700" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••",
+              class: "rounded-md border border-neutral-200 px-3 py-2 text-sm text-brand-ink shadow-[inset_0_1px_2px_rgba(14,17,16,0.06)] outline-none placeholder:text-neutral-400 focus:border-brand-lime-600 focus:ring-3 focus:ring-brand-lime/35" %>
+      </div>
+
+      <%= f.submit "Créer mon compte",
+            class: "mt-2 cursor-pointer rounded-md border border-brand-lime-600 bg-brand-lime px-4 py-2.5 text-sm font-semibold text-brand-ink shadow-[0_1px_0_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.25)] transition-colors hover:bg-brand-lime-600 active:bg-brand-lime-700" %>
+    <% end %>
+
+    <div class="mt-6 text-center text-sm text-neutral-500">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
