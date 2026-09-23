@@ -1,24 +1,38 @@
 <% content_for :title, "Tableau de bord — EE Boilerplate" %>
 
-<div class="mx-auto max-w-xl px-4 py-8">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-brand-ink">EE Boilerplate</h1>
-    <%= button_to "Se déconnecter", destroy_user_session_path, method: :delete,
-          class: "cursor-pointer rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50" %>
-  </div>
-  <p class="mt-2 text-neutral-600">
-    Connecté en tant que <span class="font-medium"><%= current_user.email %></span>.
-  </p>
+<div class="min-h-screen bg-neutral-25">
+  <header class="border-b border-neutral-200 bg-white">
+    <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
+      <div class="flex items-center gap-3">
+        <%= image_tag "ifutur-logo.png", alt: "iFutur", class: "h-6 w-auto" %>
+        <span class="h-4 w-px bg-neutral-200"></span>
+        <span class="text-sm font-semibold text-brand-ink">EE Boilerplate</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-neutral-500"><%= current_user.email %></span>
+        <%= button_to "Se déconnecter", destroy_user_session_path, method: :delete,
+              class: "cursor-pointer rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50" %>
+      </div>
+    </div>
+  </header>
 
-  <div class="mt-4 rounded-lg border border-neutral-200 p-6">
-    <h2 class="text-lg font-semibold text-brand-ink">Statut de l'application</h2>
-    <p class="mt-2">
-      <span class="inline-block rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-success">
-        Base de données connectée
-      </span>
-    </p>
-    <p class="mt-2 text-sm text-neutral-500">
-      Health check disponible sur <code class="rounded bg-neutral-100 px-1 py-0.5 font-mono text-xs"><%= rails_health_check_path %></code>.
-    </p>
-  </div>
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <div class="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xs">
+      <div class="flex items-center gap-3 border-b border-neutral-100 px-6 py-4">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-success-bg text-success">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <h1 class="text-lg font-semibold text-brand-ink">Statut de l'application</h1>
+      </div>
+
+      <div class="flex items-center justify-between px-6 py-5">
+        <span class="inline-flex items-center rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-success">
+          Base de données connectée
+        </span>
+        <code class="rounded bg-neutral-100 px-2 py-1 font-mono text-xs text-neutral-600"><%= rails_health_check_path %></code>
+      </div>
+    </div>
+  </main>
 </div>
