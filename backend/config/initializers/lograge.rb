@@ -12,8 +12,8 @@ Rails.application.configure do
   config.lograge.custom_options = lambda do |event|
     {
       time: Time.current.iso8601,
-      params: event.payload[:params]&.except("controller", "action"),
-      request_id: event.payload[:headers]&.[]("action_dispatch.request_id"),
+      params: event.payload[:params]&.except('controller', 'action'),
+      request_id: event.payload[:headers]&.[]('action_dispatch.request_id')
     }
   end
 end

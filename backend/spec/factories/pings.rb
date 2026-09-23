@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :ping do
-    status { "ok" }
+    status { 'ok' }
   end
 end
