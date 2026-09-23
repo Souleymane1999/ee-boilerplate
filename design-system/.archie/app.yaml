@@ -1,0 +1,9 @@
+app:
+  framework: nuxt
+install:
+  command: npm install
+dev:
+  command: sh -c 'npm install && NUXT_APP_CDN_URL=${NUXT_APP_CDN_URL:-/api/p/$PORT/} npm run build && HOST=0.0.0.0 PORT=$PORT NUXT_APP_CDN_URL=${NUXT_APP_CDN_URL:-/api/p/$PORT/} node nuxt-app/.output/server/index.mjs'
+  port_env: PORT
+  strict_port: true
+  health_path: /

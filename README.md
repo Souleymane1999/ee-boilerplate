@@ -84,7 +84,7 @@ Détails complets : [`docs/contributing.md`](docs/contributing.md).
 ee-boilerplate/
 ├── backend/              # Rails API only + PostgreSQL (RSpec, Rubocop, Brakeman)
 ├── frontend/              # React + Vite + TypeScript (Vitest, ESLint, Prettier)
-├── design-system/         # Placeholder — à remplacer par le vrai design system de l'équipe
+├── design-system/         # Design system de l'équipe (Delta Force / iFutur), app Nuxt incluse
 ├── docs/                  # Documentation (architecture, observabilité, sécurité, runbook...)
 ├── scripts/                # backup.sh / restore.sh
 ├── .github/
@@ -107,7 +107,7 @@ ee-boilerplate/
 | Sécurité (secrets, Dependabot, Brakeman, npm audit) | `docs/security.md`, `.github/dependabot.yml` |
 | Documentation (architecture, runbook, contribution) | `docs/` |
 | Gestion des incidents (sévérités, post-mortem) | `docs/incident-response.md` |
-| Design system (placeholder documenté) | `design-system/` |
+| Design system (Delta Force / iFutur) | `design-system/` |
 
 ## Table des matières (documentation)
 
@@ -118,7 +118,7 @@ ee-boilerplate/
 - [`docs/runbook.md`](docs/runbook.md) — déploiement, rollback, logs en prod
 - [`docs/contributing.md`](docs/contributing.md) — convention de commits, process de PR
 - [`docs/incident-response.md`](docs/incident-response.md) — sévérités, triage, post-mortem
-- [`design-system/README.md`](design-system/README.md) — comment brancher le vrai design system
+- [`design-system/README.md`](design-system/README.md) — design system Delta Force / iFutur (tokens, UI kits, app Nuxt)
 
 ## Comment démarrer un nouveau projet à partir de ce boilerplate
 
@@ -163,6 +163,6 @@ ee-boilerplate/
 
 6. **Configurer les GitHub Secrets** nécessaires à la CI (`RAILS_MASTER_KEY`, `SENTRY_DSN`, etc. — voir [`docs/security.md`](docs/security.md)).
 
-7. **Brancher le vrai design system de l'équipe** dans `design-system/` (voir [`design-system/README.md`](design-system/README.md)) si applicable, sinon supprimer ce dossier.
+7. **Adapter le design system** dans `design-system/` (voir [`design-system/README.md`](design-system/README.md)) si le nouveau projet a une identité différente d'iFutur, sinon le garder tel quel.
 
 8. Adapter `docs/architecture.md` et ce `README.md` aux spécificités réelles du nouveau projet, et commencer à développer.

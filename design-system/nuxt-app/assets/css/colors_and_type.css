@@ -1,0 +1,227 @@
+/* =============================================================================
+   iFutur — Color & Type Foundations
+   Single source of truth. Import this from any UI kit, slide, or preview card.
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Brand ────────────────────────────────────────────────────────────── */
+  --brand-lime: #BBCB44;          /* primary, taken from logo */
+  --brand-lime-600: #A3B339;      /* hover */
+  --brand-lime-700: #889732;      /* active / pressed */
+  --brand-lime-500: #C6D45C;      /* hover-on-dark */
+  --brand-lime-200: #E4ECAA;      /* subtle tint */
+  --brand-lime-100: #F2F6D6;      /* soft tint */
+  --brand-lime-50:  #F9FBEC;      /* wash */
+
+  --brand-ink:   #0E1110;         /* deepest surface / dark hero */
+  --brand-ink-2: #1A1D1F;         /* near-black for type */
+
+  /* ── Neutrals (warm-cool slate, calibrated to lime) ───────────────────── */
+  --neutral-0:   #FFFFFF;
+  --neutral-25:  #FAFAF8;         /* page bg, slight warmth */
+  --neutral-50:  #F4F4F1;         /* card subtle bg */
+  --neutral-100: #ECECE7;         /* divider / chip bg */
+  --neutral-200: #DDDDD6;         /* border */
+  --neutral-300: #C5C5BC;         /* strong border */
+  --neutral-400: #9A9A90;         /* muted icon */
+  --neutral-500: #6F6F66;         /* secondary text */
+  --neutral-600: #525249;         /* body emphasis */
+  --neutral-700: #36362F;
+  --neutral-800: #22221D;
+  --neutral-900: #131310;
+
+  /* ── Semantic (used sparingly — fintech reads better when calm) ───────── */
+  --success:        #2F8F4F;
+  --success-bg:     #E6F4EA;
+  --success-border: #BFE0CB;
+
+  --warning:        #C2841A;
+  --warning-bg:     #FCF3DD;
+  --warning-border: #ECD7A0;
+
+  --danger:         #C8362D;
+  --danger-bg:      #FBE7E5;
+  --danger-border: #EFBEB9;
+
+  --info:           #2C6DB5;
+  --info-bg:        #E5EFF9;
+  --info-border:    #BCD3EC;
+
+  /* ── Foreground tokens (semantic) ─────────────────────────────────────── */
+  --fg-1: var(--neutral-900);     /* headlines, primary */
+  --fg-2: var(--neutral-700);     /* body */
+  --fg-3: var(--neutral-500);     /* secondary, captions */
+  --fg-4: var(--neutral-400);     /* muted, placeholder */
+  --fg-on-brand: var(--brand-ink); /* text on lime */
+  --fg-on-dark: #F4F4F1;
+
+  /* ── Background tokens (semantic) ─────────────────────────────────────── */
+  --bg-page:    var(--neutral-25);
+  --bg-surface: var(--neutral-0);
+  --bg-sunken:  var(--neutral-50);
+  --bg-raised:  var(--neutral-0);
+  --bg-inverse: var(--brand-ink);
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --border-subtle: var(--neutral-100);
+  --border-default: var(--neutral-200);
+  --border-strong:  var(--neutral-300);
+  --border-focus:   var(--brand-lime-600);
+
+  /* ── Radii ────────────────────────────────────────────────────────────── */
+  --radius-xs:  3px;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  /* ── Spacing scale (4px base, tight steps for dense fintech UIs) ──────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ── Shadows (soft, layered — never harsh) ────────────────────────────── */
+  --shadow-xs: 0 1px 1px rgba(14, 17, 16, 0.04);
+  --shadow-sm: 0 1px 2px rgba(14, 17, 16, 0.06), 0 1px 1px rgba(14, 17, 16, 0.04);
+  --shadow-md: 0 4px 12px rgba(14, 17, 16, 0.06), 0 1px 2px rgba(14, 17, 16, 0.04);
+  --shadow-lg: 0 12px 28px rgba(14, 17, 16, 0.10), 0 2px 4px rgba(14, 17, 16, 0.04);
+  --shadow-xl: 0 24px 56px rgba(14, 17, 16, 0.14), 0 4px 8px rgba(14, 17, 16, 0.05);
+  --shadow-focus: 0 0 0 3px rgba(187, 203, 68, 0.35);
+
+  /* Inner shadow for inputs (gives Stripe-y inset depth) */
+  --shadow-inset: inset 0 1px 2px rgba(14, 17, 16, 0.06);
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-sans: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'Menlo', monospace;
+  --font-display: 'Open Sans', system-ui, sans-serif; /* display = same family at 800 weight + tight tracking */
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* Type scale — fluid, but tokens are the canonical mid-step */
+  --type-display-lg-size: 64px;
+  --type-display-lg-lh:   1.04;
+  --type-display-lg-tracking: -0.025em;
+
+  --type-display-size: 48px;
+  --type-display-lh:   1.08;
+  --type-display-tracking: -0.022em;
+
+  --type-h1-size: 36px;
+  --type-h1-lh:   1.15;
+  --type-h1-tracking: -0.018em;
+
+  --type-h2-size: 28px;
+  --type-h2-lh:   1.2;
+  --type-h2-tracking: -0.014em;
+
+  --type-h3-size: 22px;
+  --type-h3-lh:   1.3;
+  --type-h3-tracking: -0.01em;
+
+  --type-h4-size: 18px;
+  --type-h4-lh:   1.35;
+  --type-h4-tracking: -0.005em;
+
+  --type-body-lg-size: 17px;
+  --type-body-lg-lh:   1.55;
+
+  --type-body-size: 15px;
+  --type-body-lh:   1.55;
+
+  --type-body-sm-size: 13.5px;
+  --type-body-sm-lh:   1.5;
+
+  --type-caption-size: 12px;
+  --type-caption-lh:   1.4;
+  --type-caption-tracking: 0.01em;
+
+  --type-eyebrow-size: 11.5px;
+  --type-eyebrow-lh:   1.2;
+  --type-eyebrow-tracking: 0.12em;     /* ALL-CAPS eyebrow */
+
+  --type-mono-size: 13px;
+  --type-mono-lh:   1.45;
+
+  /* Numerals — use tabular for tables, prop for prose */
+  --num-tabular: 'tnum' 1, 'lnum' 1;
+  --num-prop:    'pnum' 1, 'lnum' 1;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+}
+
+/* =============================================================================
+   Semantic element styles — apply via class or element selector.
+   ============================================================================= */
+
+.if-body, body.if {
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-lh);
+  color: var(--fg-2);
+  font-feature-settings: var(--num-prop);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-page);
+}
+
+.if-display-lg { font-family: var(--font-display); font-weight: var(--fw-black); font-size: var(--type-display-lg-size); line-height: var(--type-display-lg-lh); letter-spacing: var(--type-display-lg-tracking); color: var(--fg-1); }
+.if-display    { font-family: var(--font-display); font-weight: var(--fw-bold);  font-size: var(--type-display-size);    line-height: var(--type-display-lh);    letter-spacing: var(--type-display-tracking);    color: var(--fg-1); }
+
+h1, .if-h1 { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--type-h1-size); line-height: var(--type-h1-lh); letter-spacing: var(--type-h1-tracking); color: var(--fg-1); margin: 0; }
+h2, .if-h2 { font-family: var(--font-sans);    font-weight: var(--fw-bold); font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-tracking); color: var(--fg-1); margin: 0; }
+h3, .if-h3 { font-family: var(--font-sans);    font-weight: var(--fw-semibold); font-size: var(--type-h3-size); line-height: var(--type-h3-lh); letter-spacing: var(--type-h3-tracking); color: var(--fg-1); margin: 0; }
+h4, .if-h4 { font-family: var(--font-sans);    font-weight: var(--fw-semibold); font-size: var(--type-h4-size); line-height: var(--type-h4-lh); letter-spacing: var(--type-h4-tracking); color: var(--fg-1); margin: 0; }
+
+.if-body-lg { font-size: var(--type-body-lg-size); line-height: var(--type-body-lg-lh); color: var(--fg-2); }
+.if-body-sm { font-size: var(--type-body-sm-size); line-height: var(--type-body-sm-lh); color: var(--fg-2); }
+.if-caption { font-size: var(--type-caption-size); line-height: var(--type-caption-lh); letter-spacing: var(--type-caption-tracking); color: var(--fg-3); }
+.if-eyebrow {
+  font-size: var(--type-eyebrow-size);
+  line-height: var(--type-eyebrow-lh);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+  font-weight: var(--fw-semibold);
+  color: var(--fg-3);
+}
+
+.if-mono, code, kbd, samp { font-family: var(--font-mono); font-size: var(--type-mono-size); line-height: var(--type-mono-lh); }
+.if-num-tabular { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: var(--num-tabular); }
+
+/* Links */
+a.if-link, .if-link {
+  color: var(--brand-lime-700);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in oklab, var(--brand-lime-700) 40%, transparent);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a.if-link:hover { color: var(--brand-lime-600); text-decoration-color: var(--brand-lime-600); }
+
+/* Selection */
+::selection { background: var(--brand-lime); color: var(--brand-ink); }

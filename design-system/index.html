@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Delta Force · iFutur Design System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Token source of truth + UI kit styles (used by inline kit components). -->
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="ui_kits/web_app/styles.css">
+<link rel="stylesheet" href="ui_kits/mobile/styles.css?v=pi-contact-badge-1">
+
+<style>
+  /* ════════════════════════════════════════════════════════════════════════
+     Design System shell · dark sidebar + light content area
+     ════════════════════════════════════════════════════════════════════════ */
+  :root {
+    --ds-sidebar-w: 280px;
+    --ds-sidebar-bg: var(--brand-ink);
+    --ds-sidebar-fg: #E7E7E1;
+    --ds-sidebar-fg-muted: #8E8E84;
+    --ds-sidebar-hover: rgba(255,255,255,0.06);
+    --ds-sidebar-active: rgba(187,203,68,0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, #root { margin: 0; padding: 0; height: 100%; background: var(--bg-page); }
+  body { font-family: var(--font-sans); color: var(--fg-2); -webkit-font-smoothing: antialiased; }
+
+  .ds-app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ─── Sidebar ─────────────────────────────────────────────────────────── */
+  .ds-sidebar {
+    width: var(--ds-sidebar-w);
+    flex-shrink: 0;
+    background: var(--ds-sidebar-bg);
+    color: var(--ds-sidebar-fg);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.04);
+    overflow-y: auto;
+  }
+  .ds-sidebar::-webkit-scrollbar { width: 6px; }
+  .ds-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+  .ds-brand { padding: 22px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .ds-brand img { height: 24px; display: block; }
+  .ds-brand-sub { font-size: 10.5px; color: var(--ds-sidebar-fg-muted); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; margin-top: 8px; }
+
+  .ds-nav { padding: 12px 10px 28px; flex: 1; }
+
+  .ds-section-title { font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--ds-sidebar-fg-muted); padding: 14px 14px 6px; }
+
+  .ds-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; margin: 1px 4px;
+    border-radius: 8px; color: var(--ds-sidebar-fg);
+    background: transparent; border: 0; cursor: pointer;
+    font-size: 13.5px; font-weight: 500; line-height: 1.3;
+    text-align: left; width: calc(100% - 8px); font-family: inherit;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .ds-link:hover { background: var(--ds-sidebar-hover); }
+  .ds-link.is-active { background: var(--ds-sidebar-active); color: var(--brand-lime); }
+  .ds-link .lucide { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+  .ds-link.is-active .lucide { color: var(--brand-lime); opacity: 1; }
+  .ds-link-body { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .ds-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 14px 14px; }
+
+  .ds-link-kit {
+    margin: 2px 4px; padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ds-link-kit:hover { background: rgba(255,255,255,0.06); }
+  .ds-link-kit.is-active { background: rgba(187,203,68,0.16); border-color: rgba(187,203,68,0.4); color: var(--brand-lime); }
+  .ds-link-kit .lucide { width: 18px; height: 18px; opacity: 1; }
+  .ds-link-kit .ds-link-body { font-weight: 600; font-size: 14px; }
+
+  .ds-footer { padding: 14px 22px 22px; font-size: 11.5px; color: var(--ds-sidebar-fg-muted); border-top: 1px solid rgba(255,255,255,0.06); line-height: 1.5; }
+  .ds-footer code { font-family: var(--font-mono); color: var(--brand-lime); font-size: 11px; }
+
+  /* ─── Main content area ───────────────────────────────────────────────── */
+  .ds-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-page); min-width: 0; }
+
+  .ds-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 28px; min-height: 56px;
+    background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
+  .ds-crumbs { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-3); }
+  .ds-crumbs strong { color: var(--fg-1); font-weight: 600; }
+  .ds-crumbs .sep { color: var(--fg-4); }
+
+  .ds-content { flex: 1; overflow: auto; background: var(--bg-page); min-width: 0; }
+  .ds-content.is-preview { padding: 32px 28px 64px; max-width: 1200px; margin: 0 auto; width: 100%; }
+  .ds-content.is-kit { padding: 0; }
+
+  /* ─── Preview card wrapper (used by all foundations / components / brand) ─ */
+  .ds-preview {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+    padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .ds-preview.is-dark { background: var(--brand-ink); color: var(--fg-on-dark); border-color: rgba(255,255,255,0.08); }
+  .ds-preview-header { display: flex; flex-direction: column; gap: 6px; }
+  .ds-preview-title { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--fg-1); line-height: 1.2; }
+  .ds-preview-desc  { margin: 0; font-size: 13.5px; color: var(--fg-3); line-height: 1.55; max-width: 720px; }
+
+  /* Shared atoms for previews (formerly _card.css) */
+  .pv-row { display: flex; gap: 12px; align-items: center; }
+  .pv-col { display: flex; flex-direction: column; gap: 8px; }
+  .pv-swatch { width: 84px; height: 84px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .pv-swatch-sm { width: 56px; height: 56px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .pv-swatch-label { font-size: 11px; color: var(--fg-3); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; font-family: var(--font-mono); }
+  .pv-swatch-name { font-size: 12px; color: var(--fg-1); font-weight: 600; }
+  .pv-token-name { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); }
+
+  /* Page header (above a stack of previews) */
+  .ds-page-head { margin-bottom: 22px; }
+  .ds-page-head h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.014em; color: var(--fg-1); }
+  .ds-page-head p  { margin: 6px 0 0; color: var(--fg-3); font-size: 14px; max-width: 720px; line-height: 1.55; }
+  .ds-stack { display: flex; flex-direction: column; gap: 20px; }
+
+  /* When the WebUI kit is mounted in the content area: let it own the full
+     viewport. Override its own page padding so it fills nicely. */
+  .ds-content.is-kit .webui-shell .app { min-height: 100%; }
+
+  /* ─── Mobile UI page · documentation layout for the phone grid ────────── */
+  /* CSS-scale all phones to 70% of native (390×844) so several fit per row. */
+  .mk-page {
+    --mk-phone-scale: 0.70;
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 24px 28px 80px;
+    background: var(--neutral-50);
+    min-height: 100%;
+    color: var(--fg-2);
+  }
+  .mk-head { margin-bottom: 20px; }
+  .mk-eyebrow {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 700; color: var(--brand-lime-700); margin-bottom: 6px;
+  }
+  .mk-title {
+    font-family: var(--font-sans); font-size: 24px; font-weight: 800;
+    letter-spacing: -0.02em; color: var(--fg-1); margin: 0 0 6px; line-height: 1.15;
+  }
+  .mk-lede {
+    font-size: 13.5px; color: var(--fg-3);
+    max-width: 720px; line-height: 1.5; margin: 0;
+  }
+  .mk-screen-tools {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin-top: 12px;
+  }
+  .mk-screen-tools span {
+    display: inline-flex; align-items: center; min-height: 32px;
+    padding: 0 11px; border-radius: 999px; background: var(--bg-surface);
+    border: 1px solid var(--border-subtle); color: var(--fg-2);
+    font-size: 12px; font-weight: 700;
+  }
+  .mk-screen-tools select {
+    min-height: 32px; border-radius: 999px; border: 1px solid var(--border-subtle);
+    background: var(--bg-surface); color: var(--fg-2); padding: 0 34px 0 12px;
+    font: inherit; font-size: 12px; font-weight: 700;
+  }
+  .mk-tool-button {
+    min-height: 32px; border-radius: 999px; border: 1px solid var(--border-subtle);
+    background: var(--bg-surface); color: var(--fg-2); padding: 0 12px;
+    font: inherit; font-size: 12px; font-weight: 700; display: inline-flex;
+    align-items: center; gap: 6px; cursor: pointer;
+  }
+  .mk-tool-button:hover:not(:disabled) { border-color: var(--border-default); color: var(--fg-1); }
+  .mk-tool-button:disabled { opacity: 0.45; cursor: default; }
+  .mk-tool-button .lucide { width: 14px; height: 14px; }
+  .mk-toc {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin: 14px 0 0; padding: 8px 10px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
+  }
+  .mk-toc a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px;
+    background: var(--neutral-50); color: var(--fg-2);
+    text-decoration: none; font-size: 12.5px; font-weight: 600;
+    border: 1px solid transparent; transition: all 120ms;
+  }
+  .mk-toc a:hover {
+    border-color: var(--border-default);
+    background: var(--bg-surface); color: var(--fg-1);
+  }
+  .mk-toc a .mk-count {
+    font-size: 11px; font-weight: 700;
+    color: var(--fg-4); font-variant-numeric: tabular-nums;
+  }
+
+  .mk-section { margin-top: 32px; scroll-margin-top: 16px; }
+  .mk-section-head {
+    display: flex; align-items: flex-end; gap: 14px;
+    padding: 0 4px 12px;
+    border-bottom: 1px solid var(--border-default);
+    margin-bottom: 20px;
+  }
+  .mk-section-head .num {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    color: var(--fg-4); background: var(--neutral-100);
+    border-radius: 6px; padding: 4px 7px;
+    flex-shrink: 0; line-height: 1;
+  }
+  .mk-section-head .body { flex: 1; }
+  .mk-section-head h2 {
+    margin: 0 0 2px; font-size: 18px; font-weight: 700;
+    letter-spacing: -0.01em; color: var(--fg-1);
+  }
+  .mk-section-head p {
+    margin: 0; font-size: 12.5px; color: var(--fg-3);
+    max-width: 720px; line-height: 1.5;
+  }
+  .mk-section-head .count {
+    font-size: 11.5px; color: var(--fg-3);
+    background: var(--bg-surface); border: 1px solid var(--border-subtle);
+    padding: 4px 10px; border-radius: 999px;
+    font-weight: 600; flex-shrink: 0;
+  }
+
+  .mk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(402px * var(--mk-phone-scale) + 24px), 1fr));
+    gap: 20px 16px;
+    justify-items: center;
+    border-radius: var(--radius-md);
+  }
+  .mk-grid.is-drop-zone {
+    outline: 1px dashed rgba(187,203,68,0.7); outline-offset: 8px;
+    background: rgba(187,203,68,0.06);
+  }
+  .mk-card {
+    background: transparent;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px; border-radius: var(--radius-md); transition: opacity 120ms, transform 120ms;
+  }
+  .mk-card.is-dragging { opacity: 0.45; transform: scale(0.98); }
+  .mk-card.is-drop-target .mk-frame::after {
+    content: ""; position: absolute; inset: -8px; border-radius: 30px;
+    border: 2px solid var(--brand-lime); pointer-events: none;
+  }
+
+  /* Scaled phone wrapper — reserves the post-scale box in flow so the grid
+     sizes correctly rather than seeing the phone's native 402×856 footprint. */
+  .mk-frame {
+    width:  calc(402px * var(--mk-phone-scale));
+    height: calc(856px * var(--mk-phone-scale));
+    position: relative;
+  }
+  .mk-frame .phone {
+    transform: scale(var(--mk-phone-scale));
+    transform-origin: top left;
+    position: absolute; top: 0; left: 0;
+    box-shadow: 0 16px 36px rgba(14,17,16,0.14), 0 2px 6px rgba(14,17,16,0.06);
+  }
+  .mk-frame .phone.is-interactive {
+    box-shadow:
+      0 22px 60px rgba(187,203,68,0.18),
+      0 16px 36px rgba(14,17,16,0.14),
+      0 0 0 2px rgba(187,203,68,0.5);
+  }
+
+  .mk-caption {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--fg-2); font-weight: 600;
+    line-height: 1.3; padding: 0 8px; text-align: center;
+  }
+  .mk-drag-screen {
+    width: 28px; height: 28px; border-radius: 999px; border: 1px solid var(--border-subtle);
+    background: var(--bg-surface); color: var(--fg-3); display: inline-flex;
+    align-items: center; justify-content: center; padding: 0; cursor: grab; flex-shrink: 0;
+  }
+  .mk-drag-screen:active { cursor: grabbing; }
+  .mk-drag-screen:hover { color: var(--fg-1); border-color: var(--border-default); }
+  .mk-drag-screen .lucide { width: 15px; height: 15px; }
+  .mk-hide-screen {
+    width: 28px; height: 28px; border-radius: 999px; border: 1px solid var(--border-subtle);
+    background: var(--bg-surface); color: var(--fg-3); display: inline-flex;
+    align-items: center; justify-content: center; padding: 0; cursor: pointer;
+  }
+  .mk-hide-screen:hover { color: var(--fg-1); border-color: var(--border-default); }
+  .mk-hide-screen .lucide { width: 14px; height: 14px; }
+  .mk-empty-section {
+    width: 100%; max-width: 460px; padding: 18px; border-radius: var(--radius-md);
+    background: var(--bg-surface); border: 1px dashed var(--border-default);
+    color: var(--fg-3); font-size: 13px; font-weight: 700; text-align: center;
+  }
+  .mk-caption .mk-tag {
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 700; background: var(--brand-lime); color: var(--brand-ink);
+    padding: 2px 7px; border-radius: 999px;
+  }
+  .mk-caption .mk-tag.muted {
+    background: var(--neutral-100); color: var(--fg-3);
+  }
+
+  @media (max-width: 900px) {
+    :root { --ds-sidebar-w: 240px; }
+    .mk-page { padding: 20px 16px 64px; }
+  }
+  @media (max-width: 640px) {
+    .ds-app { flex-direction: column; }
+    .ds-sidebar { width: 100%; height: auto; max-height: 50vh; }
+    .mk-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── Auth gate (login screen) ───────────────────────────────────────── */
+  /* Casual deterrent only — anyone with dev tools can read the credentials
+     in the JS source. For real protection, put the site behind HTTP Basic
+     Auth at the host (Cloudflare Worker, nginx, etc.). */
+  .ds-auth {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(187,203,68,0.10) 0%, transparent 55%),
+      var(--brand-ink);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 24px 0; gap: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  .ds-auth-card { flex-shrink: 0; }
+
+  /* ─── Contra-style mini-game pinned to the auth screen footer ───────── */
+  .ds-game {
+    margin-top: auto;
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    flex-direction: column;
+  }
+  .ds-game-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #0E1110;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    image-rendering: pixelated;
+  }
+  .ds-game-hud {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    padding: 12px 18px 14px;
+    color: rgba(255,255,255,0.72);
+    font-size: 12px;
+    line-height: 1.5;
+    display: flex; flex-direction: column; gap: 6px; align-items: center;
+  }
+  .ds-game-hud-title {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--brand-lime);
+  }
+  .ds-game-hud-mission {
+    color: rgba(244,244,241,0.85);
+    font-weight: 500;
+    text-align: center;
+    max-width: 720px;
+  }
+  .ds-game-hud-mission b { color: #F4F4F1; font-weight: 700; }
+  .ds-game-hud-controls {
+    display: flex; gap: 18px; justify-content: center; align-items: center;
+    flex-wrap: wrap;
+    color: rgba(255,255,255,0.65);
+    font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .ds-game-hud-tip {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-style: italic;
+    text-align: center;
+  }
+  .ds-game-hud kbd {
+    font-family: var(--font-mono);
+    background: rgba(187,203,68,0.10);
+    border: 1px solid rgba(187,203,68,0.25);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--brand-lime);
+    margin-right: 4px;
+  }
+  .ds-auth-card {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    padding: 36px 32px 32px;
+    width: 100%; max-width: 380px;
+    display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .ds-auth-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    margin-bottom: 4px;
+  }
+  .ds-auth-head .ds-auth-logo { height: 36px; margin: 0; align-self: center; }
+  .ds-auth-head-text {
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+    text-align: right; align-items: flex-end;
+  }
+  .ds-auth-head-text .if-eyebrow { margin: 0; line-height: 1; }
+  .ds-auth-head-text .ds-auth-title { margin: 0; }
+  .ds-auth-logo { height: 28px; align-self: flex-start; margin-bottom: 8px; }
+  .ds-auth-title { margin: 0; font-size: 22px; font-weight: 700; color: var(--fg-1); letter-spacing: -0.01em; line-height: 1.15; }
+  .ds-auth-sub   { margin: 0 0 10px; color: var(--fg-3); font-size: 13.5px; line-height: 1.5; }
+  .ds-auth-label { font-size: 12px; font-weight: 600; color: var(--fg-2); margin-bottom: -6px; }
+  .ds-auth-input {
+    font-family: var(--font-sans); font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-default);
+    border-radius: 10px; background: #fff;
+    box-shadow: inset 0 1px 2px rgba(14,17,16,0.04);
+    outline: none; transition: border-color 120ms, box-shadow 120ms;
+  }
+  .ds-auth-input:focus {
+    border-color: var(--brand-lime-600);
+    box-shadow: inset 0 1px 2px rgba(14,17,16,0.04), 0 0 0 3px rgba(187,203,68,0.32);
+  }
+  .ds-auth-input.is-error { border-color: #C8362D; box-shadow: 0 0 0 3px rgba(200,54,45,0.18); }
+  .ds-auth-err  { color: #C8362D; font-size: 12.5px; margin-top: -4px; font-weight: 500; }
+  .ds-auth-btn {
+    background: var(--brand-lime); color: var(--brand-ink);
+    border: 1px solid var(--brand-lime-600);
+    border-radius: 10px; padding: 11px 16px;
+    font-weight: 700; font-size: 14px; cursor: pointer;
+    margin-top: 6px; transition: background 120ms, transform 120ms;
+    font-family: inherit;
+  }
+  .ds-auth-btn:hover  { background: var(--brand-lime-600); }
+  .ds-auth-btn:active { background: var(--brand-lime-700); transform: translateY(1px); }
+  .ds-auth-note { margin-top: 14px; font-size: 11.5px; color: var(--fg-4); text-align: center; }
+</style>
+
+<!-- React + Babel + Lucide via CDN. Babel transpiles JSX at runtime. -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/html2canvas.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- ─── Shared Preview wrapper (referenced by every preview component) ──── -->
+<script type="text/babel">
+  window.Preview = ({ eyebrow, title, description, children, dark }) => (
+    <section className={`ds-preview ${dark ? 'is-dark' : ''}`}>
+      {(eyebrow || title || description) && (
+        <header className="ds-preview-header">
+          {eyebrow && <div className="if-eyebrow" style={dark ? { color: '#9A9A90' } : null}>{eyebrow}</div>}
+          {title && <h2 className="ds-preview-title" style={dark ? { color: '#F4F4F1' } : null}>{title}</h2>}
+          {description && <p className="ds-preview-desc" style={dark ? { color: '#C5C5BC' } : null}>{description}</p>}
+        </header>
+      )}
+      {children}
+    </section>
+  );
+</script>
+
+<!-- ─── Web app kit JSX (Sidebar, Topbar, pages, components) ───────────── -->
+<script type="text/babel" src="ui_kits/web_app/components.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Dashboard.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Payouts.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/PayoutDetail.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Collections.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Recipients.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Team.jsx"></script>
+<script type="text/babel" src="ui_kits/web_app/Settings.jsx"></script>
+
+<!-- ─── Mobile kit JSX (M_Icon, StatusBar, TabBar, screens) ────────────── -->
+<script type="text/babel" src="ui_kits/mobile/components.jsx"></script>
+<script type="text/babel" src="ui_kits/mobile/Screens.jsx"></script>
+<script type="text/babel" src="ui_kits/mobile/Screens2.jsx"></script>
+<script type="text/babel" src="ui_kits/mobile/Screens3.jsx"></script>
+<script type="text/babel" src="ui_kits/mobile/PiSPIScreens.jsx?v=tests-export-all-1"></script>
+
+<!-- ─── Design-system page components ──────────────────────────────────── -->
+<script type="text/babel" src="pages/foundations.jsx"></script>
+<script type="text/babel" src="pages/components.jsx"></script>
+<script type="text/babel" src="pages/brand.jsx"></script>
+<script type="text/babel" src="pages/web-ui.jsx"></script>
+  <script type="text/babel" src="pages/mobile-ui.jsx"></script>
+  <script type="text/babel" src="pages/pispi-mobile-ui.jsx?v=prod-tests-69-100-1"></script>
+  <script type="text/babel" src="pages/pi-finale.jsx?v=pi-finale-1"></script>
+  <script type="text/babel" src="pages/pispi-test-captures.jsx?v=tests-export-all-1"></script>
+
+<!-- ─── App shell · sidebar + routing ──────────────────────────────────── -->
+<script type="text/babel">
+  // ─────────────────────────────────────────────────────────────────────
+  // Auth — shared credentials. Change before deploying.
+  // This is a casual deterrent (client-side only). For real protection,
+  // put the site behind HTTP Basic Auth at the host.
+  // ─────────────────────────────────────────────────────────────────────
+  const AUTH_USER = 'agentX';
+  const AUTH_PASSWORD = 'marines@lph@90';
+  const AUTH_KEY  = 'ds-auth-v2';
+  const LEGACY_AUTH_KEY = 'ds-auth-v1';
+  const AUTH_SESSION_VALUE = 'ok';
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Contra-style mini-game for the auth screen footer.
+  // Controls: ← / → move, Space jump, Shift fire, R restart.
+  // Keys are ignored while a form input is focused, so credential typing
+  // doesn't move the marine.
+  // ─────────────────────────────────────────────────────────────────────
+  const ContraGame = () => {
+    const canvasRef = React.useRef(null);
+
+    React.useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
+      const GROUND_Y = H - 30;
+      const G = 0.55;
+      const JUMP_V = -10.5;
+      const MOVE_V = 2.6;
+      const BULLET_V = 8;
+      const ENEMY_V = 1.7;
+      const FIRE_COOLDOWN = 180;
+
+      const state = {
+        player: { x: 60, y: GROUND_Y - 28, w: 16, h: 28, vy: 0, onGround: true, facing: 1, invuln: 90 },
+        bullets: [],
+        enemies: [],
+        obstacles: [],
+        stars: Array.from({ length: 38 }, () => ({
+          x: Math.random() * W,
+          y: Math.random() * (GROUND_Y - 10),
+          s: Math.random() < 0.6 ? 1 : 2,
+          v: 0.15 + Math.random() * 0.35,
+        })),
+        hills: Array.from({ length: 5 }, (_, i) => ({
+          x: i * 240,
+          h: 30 + Math.random() * 20,
+        })),
+        keys: {},
+        score: 0,
+        lives: 3,
+        gameOver: false,
+        lastFire: 0,
+        nextEnemyAt: 1500,
+        nextObstacleAt: 2500,
+      };
+
+      const isTypingInForm = () => {
+        const a = document.activeElement;
+        return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA');
+      };
+
+      const reset = (now) => {
+        state.bullets = [];
+        state.enemies = [];
+        state.obstacles = [];
+        state.score = 0;
+        state.lives = 3;
+        state.gameOver = false;
+        state.lastFire = 0;
+        state.nextEnemyAt = now + 1500;
+        state.nextObstacleAt = now + 2500;
+        state.player.x = 60;
+        state.player.y = GROUND_Y - state.player.h;
+        state.player.vy = 0;
+        state.player.invuln = 90;
+        state.player.facing = 1;
+      };
+
+      const keyDown = (e) => {
+        if (isTypingInForm()) return;
+        state.keys[e.code] = true;
+        if (['Space','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','ShiftLeft','ShiftRight','KeyR','KeyA','KeyD','KeyW'].includes(e.code)) {
+          e.preventDefault();
+        }
+        if (e.code === 'KeyR' && state.gameOver) reset(performance.now());
+      };
+      const keyUp = (e) => { delete state.keys[e.code]; };
+      window.addEventListener('keydown', keyDown);
+      window.addEventListener('keyup', keyUp);
+
+      let raf;
+      const tick = (now) => {
+        if (!state.gameOver) {
+          const p = state.player;
+          const left  = state.keys['ArrowLeft']  || state.keys['KeyA'];
+          const right = state.keys['ArrowRight'] || state.keys['KeyD'];
+          const jump  = state.keys['Space']      || state.keys['ArrowUp'] || state.keys['KeyW'];
+          const fire  = state.keys['ShiftLeft']  || state.keys['ShiftRight'];
+
+          if (left)  { p.x -= MOVE_V; p.facing = -1; }
+          if (right) { p.x += MOVE_V; p.facing =  1; }
+          p.x = Math.max(8, Math.min(W - p.w - 8, p.x));
+
+          if (jump && p.onGround) { p.vy = JUMP_V; p.onGround = false; }
+          p.vy += G;
+          p.y += p.vy;
+          if (p.y >= GROUND_Y - p.h) {
+            p.y = GROUND_Y - p.h;
+            p.vy = 0;
+            p.onGround = true;
+          }
+
+          if (fire && (now - state.lastFire) > FIRE_COOLDOWN) {
+            state.bullets.push({
+              x: p.x + (p.facing > 0 ? p.w : -2),
+              y: p.y + 12,
+              vx: BULLET_V * p.facing,
+            });
+            state.lastFire = now;
+          }
+
+          for (const b of state.bullets) b.x += b.vx;
+          state.bullets = state.bullets.filter(b => b.x > -10 && b.x < W + 10 && !b.dead);
+
+          if (now >= state.nextEnemyAt) {
+            state.enemies.push({ x: W + 24, y: GROUND_Y - 22, w: 18, h: 22, walkPhase: 0 });
+            state.nextEnemyAt = now + 1200 + Math.random() * 1100;
+          }
+          if (now >= state.nextObstacleAt) {
+            state.obstacles.push({ x: W + 24, y: GROUND_Y - 18, w: 22, h: 18 });
+            state.nextObstacleAt = now + 2200 + Math.random() * 1400;
+          }
+
+          for (const e of state.enemies) { e.x -= ENEMY_V; e.walkPhase += 0.18; }
+          for (const o of state.obstacles) o.x -= ENEMY_V * 1.15;
+
+          for (const b of state.bullets) {
+            for (const en of state.enemies) {
+              if (en.dead) continue;
+              if (b.x >= en.x && b.x <= en.x + en.w && b.y >= en.y && b.y <= en.y + en.h) {
+                en.dead = true; b.dead = true; state.score += 10;
+              }
+            }
+          }
+          state.bullets = state.bullets.filter(b => !b.dead);
+          state.enemies = state.enemies.filter(en => !en.dead && en.x > -40);
+          state.obstacles = state.obstacles.filter(o => o.x > -40);
+
+          if (p.invuln > 0) {
+            p.invuln--;
+          } else {
+            const aabbHit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+            const hitEnemy = state.enemies.some(en => aabbHit(p, en));
+            const hitObs   = state.obstacles.some(o  => aabbHit(p, o));
+            if (hitEnemy || hitObs) {
+              state.lives--;
+              p.invuln = 90;
+              if (state.lives <= 0) state.gameOver = true;
+            }
+          }
+
+          for (const s of state.stars) {
+            s.x -= s.v;
+            if (s.x < 0) { s.x = W; s.y = Math.random() * (GROUND_Y - 10); }
+          }
+          for (const h of state.hills) {
+            h.x -= 0.4;
+            if (h.x < -240) h.x += 240 * state.hills.length;
+          }
+        }
+
+        // ─── Draw ────────────────────────────────────────────────────────
+        ctx.fillStyle = '#0E1110';
+        ctx.fillRect(0, 0, W, H);
+
+        // Stars (parallax)
+        ctx.fillStyle = 'rgba(244,244,241,0.55)';
+        for (const s of state.stars) ctx.fillRect(s.x, s.y, s.s, s.s);
+
+        // Background hills
+        ctx.fillStyle = '#1A1D1F';
+        for (const h of state.hills) {
+          ctx.beginPath();
+          ctx.moveTo(h.x, GROUND_Y);
+          ctx.lineTo(h.x + 120, GROUND_Y - h.h);
+          ctx.lineTo(h.x + 240, GROUND_Y);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // Ground
+        ctx.fillStyle = '#22221D';
+        ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+        ctx.fillStyle = '#BBCB44';
+        ctx.fillRect(0, GROUND_Y - 1, W, 2);
+
+        // Obstacles (crates)
+        for (const o of state.obstacles) {
+          ctx.fillStyle = '#525249';
+          ctx.fillRect(o.x, o.y, o.w, o.h);
+          ctx.fillStyle = '#36362F';
+          ctx.fillRect(o.x + 2, o.y + 2, o.w - 4, 2);
+          ctx.fillRect(o.x + 2, o.y + o.h - 4, o.w - 4, 2);
+          ctx.fillRect(o.x + o.w / 2 - 1, o.y + 2, 2, o.h - 4);
+        }
+
+        // Enemies (red walkers)
+        for (const e of state.enemies) {
+          ctx.fillStyle = '#C8362D';
+          ctx.fillRect(e.x, e.y, e.w, e.h);
+          ctx.fillStyle = '#F4F4F1';
+          ctx.fillRect(e.x + 3, e.y + 5, 3, 3);
+          ctx.fillRect(e.x + 11, e.y + 5, 3, 3);
+          // Legs animation
+          const legOffset = Math.sin(e.walkPhase) > 0 ? 0 : 2;
+          ctx.fillStyle = '#7E1F18';
+          ctx.fillRect(e.x + 3, e.y + e.h - 3, 4, 3 + legOffset);
+          ctx.fillRect(e.x + 11, e.y + e.h - 3, 4, 5 - legOffset);
+        }
+
+        // Bullets
+        ctx.fillStyle = '#F2F6D6';
+        for (const b of state.bullets) ctx.fillRect(b.x - 3, b.y, 6, 3);
+
+        // Player marine
+        const p = state.player;
+        const flash = p.invuln > 0 && Math.floor(p.invuln / 5) % 2 === 0;
+        // body
+        ctx.fillStyle = flash ? 'rgba(187,203,68,0.45)' : '#BBCB44';
+        ctx.fillRect(p.x, p.y + 8, p.w, p.h - 8);
+        // helmet / head
+        ctx.fillStyle = flash ? 'rgba(228,236,170,0.6)' : '#E4ECAA';
+        ctx.fillRect(p.x + 2, p.y, p.w - 4, 10);
+        ctx.fillStyle = '#22221D';
+        ctx.fillRect(p.x + 2, p.y + 8, p.w - 4, 2);
+        // gun
+        if (p.facing > 0) ctx.fillRect(p.x + p.w, p.y + 13, 9, 3);
+        else              ctx.fillRect(p.x - 9, p.y + 13, 9, 3);
+
+        // HUD
+        ctx.fillStyle = '#F4F4F1';
+        ctx.font = 'bold 12px "Open Sans", system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('SCORE ' + String(state.score).padStart(4, '0'), 12, 18);
+        for (let i = 0; i < state.lives; i++) {
+          ctx.fillStyle = '#BBCB44';
+          ctx.fillRect(W - 14 - (i + 1) * 11, 10, 8, 8);
+        }
+        // "MARINES ONLY" subtle sticker
+        ctx.fillStyle = 'rgba(244,244,241,0.25)';
+        ctx.font = '10px "Open Sans", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('— DELTA FORCE · MARINES ONLY —', W / 2, GROUND_Y + 18);
+
+        if (state.gameOver) {
+          ctx.fillStyle = 'rgba(14,17,16,0.78)';
+          ctx.fillRect(0, 0, W, H);
+          ctx.fillStyle = '#C8362D';
+          ctx.font = 'bold 20px "Open Sans", system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('MARINE DOWN', W / 2, H / 2 - 4);
+          ctx.fillStyle = '#F4F4F1';
+          ctx.font = '12px "Open Sans", system-ui, sans-serif';
+          ctx.fillText('Press R to redeploy · Final score ' + state.score, W / 2, H / 2 + 18);
+        }
+
+        raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('keydown', keyDown);
+        window.removeEventListener('keyup', keyUp);
+      };
+    }, []);
+
+    return (
+      <div className="ds-game">
+        <canvas ref={canvasRef} className="ds-game-canvas" width={960} height={200} />
+        <div className="ds-game-hud">
+          <div className="ds-game-hud-title">Delta Force · Field Drill</div>
+          <div className="ds-game-hud-mission">
+            <b>Mission</b> — take out the red walkers and jump over the crates. You have <b>3 lives</b>;
+            each enemy hit scores <b>+10</b>. Survive as long as you can, soldier.
+          </div>
+          <div className="ds-game-hud-controls">
+            <span><kbd>←</kbd><kbd>→</kbd> move</span>
+            <span><kbd>Space</kbd> jump</span>
+            <span><kbd>Shift</kbd> fire (hold for auto-fire)</span>
+            <span><kbd>R</kbd> redeploy after KIA</span>
+          </div>
+          <div className="ds-game-hud-tip">
+            Tip — click anywhere outside the login fields to take control. Keys are ignored while you're typing credentials.
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const AuthGate = ({ children }) => {
+    const [authed, setAuthed] = React.useState(() => {
+      try { return localStorage.getItem(AUTH_KEY) === AUTH_SESSION_VALUE; }
+      catch (e) { return false; }
+    });
+    const [u, setU] = React.useState('');
+    const [p, setP] = React.useState('');
+    const [err, setErr] = React.useState(false);
+
+    const submit = (e) => {
+      e.preventDefault();
+      if (u.trim() === AUTH_USER && p === AUTH_PASSWORD) {
+        try {
+          localStorage.setItem(AUTH_KEY, AUTH_SESSION_VALUE);
+          localStorage.removeItem(LEGACY_AUTH_KEY);
+        } catch (_) {}
+        setErr(false);
+        setAuthed(true);
+      } else {
+        setErr(true);
+      }
+    };
+
+    if (authed) return children;
+
+    return (
+      <div className="ds-auth">
+        <form className="ds-auth-card" onSubmit={submit}>
+          <div className="ds-auth-head">
+            <img className="ds-auth-logo" src="assets/logo-on-light.png" alt="iFutur" />
+            <div className="ds-auth-head-text">
+              <div className="if-eyebrow" style={{ color: 'var(--brand-lime-700)' }}>Design System</div>
+              <h1 className="ds-auth-title">Delta Force</h1>
+            </div>
+          </div>
+          <p className="ds-auth-sub">⚠ Only Marines are authorized on this battlefield. Identify yourself, soldier.</p>
+
+          <div className="ds-auth-label">Username</div>
+          <input className={`ds-auth-input ${err ? 'is-error' : ''}`}
+            placeholder="agentX" autoComplete="username" autoFocus aria-invalid={err}
+            value={u} onChange={(e) => { setU(e.target.value); setErr(false); }} />
+
+          <div className="ds-auth-label">Password</div>
+          <input className={`ds-auth-input ${err ? 'is-error' : ''}`}
+            placeholder="Password" type="password" autoComplete="current-password" aria-invalid={err}
+            value={p} onChange={(e) => { setP(e.target.value); setErr(false); }} />
+
+          {err && <div className="ds-auth-err">Incorrect username or password.</div>}
+          <button className="ds-auth-btn" type="submit">Unlock</button>
+        </form>
+        <ContraGame />
+      </div>
+    );
+  };
+
+  const signOut = () => {
+    try {
+      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(LEGACY_AUTH_KEY);
+    } catch (_) {}
+    location.reload();
+  };
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Navigation model. Each entry: { id, label, icon, render(), group, kind }
+  //   kind: 'preview' → padded content area; 'kit' → fullscreen flow
+  // ─────────────────────────────────────────────────────────────────────
+  const ROUTES = {
+    // Foundations · Color
+    'color-brand':      { group: 'Foundations · Color',   label: 'Brand · Lime',     icon: 'palette',      kind: 'preview', render: () => <FoundationsColorBrand /> },
+    'color-neutrals':   { group: 'Foundations · Color',   label: 'Neutrals',         icon: 'circle',       kind: 'preview', render: () => <FoundationsColorNeutrals /> },
+    'color-semantic':   { group: 'Foundations · Color',   label: 'Semantic',         icon: 'alert-circle', kind: 'preview', render: () => <FoundationsColorSemantic /> },
+    'color-foreground': { group: 'Foundations · Color',   label: 'Foreground',       icon: 'type',         kind: 'preview', render: () => <FoundationsColorForeground /> },
+    'brand-palette':    { group: 'Foundations · Color',   label: 'Full palette',     icon: 'layers',       kind: 'preview', render: () => <FoundationsBrandPalette /> },
+    // Foundations · Type
+    'type-scale':       { group: 'Foundations · Type',    label: 'Type scale',       icon: 'type',         kind: 'preview', render: () => <FoundationsTypeScale /> },
+    'type-weights':     { group: 'Foundations · Type',    label: 'Weights',          icon: 'bold',         kind: 'preview', render: () => <FoundationsTypeWeights /> },
+    'type-numerals':    { group: 'Foundations · Type',    label: 'Numerals',         icon: 'hash',         kind: 'preview', render: () => <FoundationsTypeNumerals /> },
+    // Foundations · Spacing
+    'spacing-scale':    { group: 'Foundations · Spacing', label: 'Spacing scale',    icon: 'move',         kind: 'preview', render: () => <FoundationsSpacingScale /> },
+    'spacing-radii':    { group: 'Foundations · Spacing', label: 'Radii',            icon: 'square',       kind: 'preview', render: () => <FoundationsRadii /> },
+    'spacing-elevation':{ group: 'Foundations · Spacing', label: 'Elevation',        icon: 'box-select',   kind: 'preview', render: () => <FoundationsElevation /> },
+    // Components
+    'comp-buttons':         { group: 'Components', label: 'Buttons',          icon: 'mouse-pointer-click', kind: 'preview', render: () => <ComponentsButtons /> },
+    'comp-inputs':          { group: 'Components', label: 'Inputs',           icon: 'text-cursor-input',   kind: 'preview', render: () => <ComponentsInputs /> },
+    'comp-badges':          { group: 'Components', label: 'Badges',           icon: 'tag',                 kind: 'preview', render: () => <ComponentsBadges /> },
+    'comp-stat':            { group: 'Components', label: 'Stat card',        icon: 'trending-up',         kind: 'preview', render: () => <ComponentsStat /> },
+    'comp-table':           { group: 'Components', label: 'Table · simple',   icon: 'table',               kind: 'preview', render: () => <ComponentsTableSimple /> },
+    'comp-table-payouts':   { group: 'Components', label: 'Table · advanced', icon: 'table-properties',    kind: 'preview', render: () => <ComponentsTablePayouts /> },
+    // Brand
+    'brand-logo-light': { group: 'Brand', label: 'Logo · light bg', icon: 'image', kind: 'preview', render: () => <BrandLogoLight /> },
+    'brand-logo-dark':  { group: 'Brand', label: 'Logo · dark bg',  icon: 'image', kind: 'preview', render: () => <BrandLogoDark /> },
+    // UI Kits
+    'web-ui':    { group: 'UI Kits', label: 'Web UI',    icon: 'monitor',    kind: 'kit', render: () => <WebUI /> },
+    'mobile-ui': { group: 'UI Kits', label: 'Mobile UI', icon: 'smartphone', kind: 'kit', render: () => <MobileUI /> },
+    'pispi-mobile-ui': { group: 'UI Kits', label: 'PiSPI Mobile', icon: 'smartphone', kind: 'kit', render: () => <PiSPIMobileUI /> },
+    'pi-finale': { group: 'UI Kits', label: 'PiFinale', icon: 'send', kind: 'kit', render: () => <PiFinale /> },
+    'pispi-test-captures': { group: 'UI Kits', label: 'PiSPI Tests', icon: 'list-checks', kind: 'kit', render: () => <PiSPITestCaptures /> },
+  };
+
+  // Ordered groups for the sidebar
+  const GROUPS = [
+    { title: 'Foundations · Color',   ids: ['color-brand','color-neutrals','color-semantic','color-foreground','brand-palette'] },
+    { title: 'Foundations · Type',    ids: ['type-scale','type-weights','type-numerals'] },
+    { title: 'Foundations · Spacing', ids: ['spacing-scale','spacing-radii','spacing-elevation'] },
+    { title: 'Components',            ids: ['comp-buttons','comp-inputs','comp-badges','comp-stat','comp-table','comp-table-payouts'] },
+    { title: 'Brand',                 ids: ['brand-logo-light','brand-logo-dark'] },
+  ];
+  const KIT_IDS = ['web-ui', 'mobile-ui', 'pispi-mobile-ui', 'pi-finale', 'pispi-test-captures'];
+  const DEFAULT_ID = 'color-brand';
+
+  // ─────────────────────────────────────────────────────────────────────
+  // App
+  // ─────────────────────────────────────────────────────────────────────
+  const routeIdFromHash = () => {
+    const h = (location.hash || '').replace(/^#/, '');
+    if (/^tests-\d+-\d+$/.test(h)) return 'pispi-test-captures';
+    return ROUTES[h] ? h : DEFAULT_ID;
+  };
+  const initialId = routeIdFromHash;
+
+  const App = () => {
+    const [id, setId] = React.useState(initialId);
+
+    React.useEffect(() => {
+      const onHash = () => {
+        const nextId = routeIdFromHash();
+        if (nextId !== id) setId(nextId);
+      };
+      window.addEventListener('hashchange', onHash);
+      return () => window.removeEventListener('hashchange', onHash);
+    }, [id]);
+
+    React.useEffect(() => {
+      history.replaceState(null, '', `${location.pathname}${location.search}#${id}`);
+      const route = ROUTES[id];
+      document.title = `Delta Force · ${route.label}`;
+      requestAnimationFrame(() => { if (window.lucide) window.lucide.createIcons(); });
+    }, [id]);
+
+    const route = ROUTES[id];
+
+    return (
+      <div className="ds-app">
+        <aside className="ds-sidebar">
+          <div className="ds-brand">
+            <img src="assets/logo-on-dark.png" alt="iFutur" />
+            <div className="ds-brand-sub">Delta Force · Design System</div>
+          </div>
+
+          <nav className="ds-nav">
+            {GROUPS.map(grp => (
+              <React.Fragment key={grp.title}>
+                <div className="ds-section-title">{grp.title}</div>
+                {grp.ids.map(itemId => {
+                  const r = ROUTES[itemId];
+                  return (
+                    <button key={itemId}
+                      className={`ds-link ${id === itemId ? 'is-active' : ''}`}
+                      onClick={() => setId(itemId)}>
+                      <i data-lucide={r.icon}></i>
+                      <span className="ds-link-body">{r.label}</span>
+                    </button>
+                  );
+                })}
+              </React.Fragment>
+            ))}
+
+            <div className="ds-divider"></div>
+            <div className="ds-section-title">UI Kits</div>
+            {KIT_IDS.map(itemId => {
+              const r = ROUTES[itemId];
+              return (
+                <button key={itemId}
+                  className={`ds-link ds-link-kit ${id === itemId ? 'is-active' : ''}`}
+                  onClick={() => setId(itemId)}>
+                  <i data-lucide={r.icon}></i>
+                  <span className="ds-link-body">{r.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="ds-footer">
+            Typeface · <code>Open Sans</code> (Google Fonts).<br />
+            Tokens · <code>colors_and_type.css</code>.<br />
+            See <code>README.md</code> for usage rules.
+            <button className="ds-link" style={{ marginTop: 12, padding: '6px 8px', fontSize: 12, color: 'var(--ds-sidebar-fg-muted)' }}
+              onClick={signOut}>
+              <i data-lucide="log-out"></i>
+              <span className="ds-link-body">Sign out</span>
+            </button>
+          </div>
+        </aside>
+
+        <main className="ds-main">
+          <div className="ds-topbar">
+            <div className="ds-crumbs">
+              <span>{route.group}</span>
+              <span className="sep">/</span>
+              <strong>{route.label}</strong>
+            </div>
+          </div>
+          <div className={`ds-content ${route.kind === 'kit' ? 'is-kit' : 'is-preview'}`}>
+            {route.kind === 'preview' ? (
+              <div className="ds-stack">{route.render()}</div>
+            ) : (
+              route.render()
+            )}
+          </div>
+        </main>
+      </div>
+    );
+  };
+
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <AuthGate><App /></AuthGate>
+  );
+</script>
+</body>
+</html>

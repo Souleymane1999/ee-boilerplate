@@ -1,0 +1,148 @@
+/* ─── Auth gate (login screen) + Contra-style mini-game ───────────────────
+   Ported from the original static index.html <style> block.
+   Casual client-side deterrent only. ─────────────────────────────────────── */
+.ds-auth {
+  --auth-brand-lime: var(--brand-lime, #BBCB44);
+  --auth-brand-lime-600: var(--brand-lime-600, #A3B339);
+  --auth-brand-lime-700: var(--brand-lime-700, #889732);
+  --auth-brand-ink: var(--brand-ink, #0E1110);
+  --auth-bg-surface: #FFFFFF;
+  --auth-fg-1: #131310;
+  --auth-fg-2: #36362F;
+  --auth-fg-3: #6F6F66;
+  --auth-fg-4: #9A9A90;
+  --auth-border: #DDDDD6;
+  --auth-font-sans: var(--font-sans, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif);
+  --auth-font-mono: var(--font-mono, "SF Mono", Consolas, Menlo, monospace);
+
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(187,203,68,0.10) 0%, transparent 55%),
+    var(--auth-brand-ink);
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100dvh;
+  padding: 40px 24px 24px; gap: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+  font-family: var(--auth-font-sans);
+  color: var(--auth-fg-2);
+}
+.ds-auth-card { flex-shrink: 0; }
+
+.ds-game {
+  margin-top: clamp(12px, 3vh, 28px);
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+}
+.ds-game-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #0E1110;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  image-rendering: pixelated;
+}
+.ds-game-hud {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+  padding: 12px 18px 14px;
+  color: rgba(255,255,255,0.72);
+  font-size: 12px;
+  line-height: 1.5;
+  display: flex; flex-direction: column; gap: 6px; align-items: center;
+}
+.ds-game-hud-title {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--auth-brand-lime);
+}
+.ds-game-hud-mission {
+  color: rgba(244,244,241,0.85);
+  font-weight: 500;
+  text-align: center;
+  max-width: 720px;
+}
+.ds-game-hud-mission b { color: #F4F4F1; font-weight: 700; }
+.ds-game-hud-controls {
+  display: flex; gap: 18px; justify-content: center; align-items: center;
+  flex-wrap: wrap;
+  color: rgba(255,255,255,0.65);
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.ds-game-hud-tip {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+  text-align: center;
+}
+.ds-game-hud kbd {
+  font-family: var(--auth-font-mono);
+  background: rgba(187,203,68,0.10);
+  border: 1px solid rgba(187,203,68,0.25);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--auth-brand-lime);
+  margin-right: 4px;
+}
+.ds-auth-card {
+  background: var(--auth-bg-surface);
+  color: var(--auth-fg-2);
+  border-radius: 16px;
+  padding: 36px 32px 32px;
+  width: 100%; max-width: 380px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
+}
+.ds-auth-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-bottom: 4px;
+}
+.ds-auth-head .ds-auth-logo { height: 36px; margin: 0; align-self: center; }
+.ds-auth-head-text {
+  display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  text-align: right; align-items: flex-end;
+}
+.ds-auth-head-text .if-eyebrow { margin: 0; line-height: 1; }
+.ds-auth-head-text .ds-auth-title { margin: 0; }
+.ds-auth-logo { height: 28px; align-self: flex-start; margin-bottom: 8px; }
+.ds-auth-title { margin: 0; font-size: 22px; font-weight: 700; color: var(--auth-fg-1); letter-spacing: -0.01em; line-height: 1.15; }
+.ds-auth-sub   { margin: 0 0 10px; color: var(--auth-fg-3); font-size: 13.5px; line-height: 1.5; }
+.ds-auth-label { font-size: 12px; font-weight: 600; color: var(--auth-fg-2); margin-bottom: -6px; }
+.ds-auth-input {
+  font-family: var(--auth-font-sans); font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--auth-border);
+  border-radius: 10px; background: #fff;
+  box-shadow: inset 0 1px 2px rgba(14,17,16,0.04);
+  outline: none; transition: border-color 120ms, box-shadow 120ms;
+  color: #131310;
+}
+.ds-auth-input:focus {
+  border-color: var(--auth-brand-lime-600);
+  box-shadow: inset 0 1px 2px rgba(14,17,16,0.04), 0 0 0 3px rgba(187,203,68,0.32);
+}
+.ds-auth-input.is-error { border-color: #C8362D; box-shadow: 0 0 0 3px rgba(200,54,45,0.18); }
+.ds-auth-err  { color: #C8362D; font-size: 12.5px; margin-top: -4px; font-weight: 500; }
+.ds-auth-btn {
+  display: block; width: 100%;
+  background: var(--auth-brand-lime); color: var(--auth-brand-ink);
+  border: 1px solid var(--auth-brand-lime-600);
+  border-radius: 10px; padding: 11px 16px;
+  font-weight: 700; font-size: 14px; cursor: pointer;
+  margin-top: 6px; transition: background 120ms, transform 120ms;
+  font-family: inherit;
+  line-height: 1.35;
+}
+.ds-auth-btn:hover  { background: var(--auth-brand-lime-600); }
+.ds-auth-btn:active { background: var(--auth-brand-lime-700); transform: translateY(1px); }
+.ds-auth-note { margin-top: 14px; font-size: 11.5px; color: var(--auth-fg-4); text-align: center; }

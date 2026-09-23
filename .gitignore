@@ -23,8 +23,11 @@ frontend/dist-ssr/
 frontend/coverage/
 frontend/*.local
 
-# Design system (if a real one is dropped in later, it will have its own .gitignore)
+# Design system (delta-force) — has its own .gitignore too (design-system/.gitignore)
 design-system/node_modules/
+design-system/nuxt-app/node_modules/
+design-system/nuxt-app/.nuxt/
+design-system/nuxt-app/.output/
 
 # Backups produced locally by scripts/backup.sh
 /backups/

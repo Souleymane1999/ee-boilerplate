@@ -1,0 +1,28 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# Editors
+.vscode/
+.idea/
+.cursor/
+.claude/
+*.swp
+*~
+
+# Local toolchains and generated build output
+node_modules/
+dist/
+build/
+.nuxt/
+.output/
+
+# Env / credentials
+.env
+.env.*
+
+# Archie runtime (not tracked)
+.archie/logs/
+.archie/pids/
+.archie/videos/
+.archie/context-files/

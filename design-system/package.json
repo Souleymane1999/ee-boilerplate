@@ -1,0 +1,19 @@
+{
+  "name": "delta-force-task-288",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev nuxt-app --host 0.0.0.0",
+    "build": "nuxt build nuxt-app",
+    "generate": "nuxt generate nuxt-app",
+    "preview": "npm run build && HOST=0.0.0.0 PORT=${PORT:-3000} node nuxt-app/.output/server/index.mjs",
+    "start": "HOST=0.0.0.0 PORT=${PORT:-3000} node nuxt-app/.output/server/index.mjs",
+    "postinstall": "nuxt prepare nuxt-app"
+  },
+  "dependencies": {
+    "lucide-vue-next": "^0.469.0",
+    "nuxt": "3.21.8",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
+  }
+}
