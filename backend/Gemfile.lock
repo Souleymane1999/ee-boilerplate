@@ -319,6 +319,7 @@ GEM
       logger
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
+    simplecov (1.2.0)
     thor (1.5.0)
     timeout (0.6.1)
     tsort (0.2.0)
@@ -375,6 +376,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   shoulda-matchers
+  simplecov
   tzinfo-data
 
 CHECKSUMS
@@ -493,6 +495,7 @@ CHECKSUMS
   sentry-rails (7.0.0) sha256=6ac6a010e088632e46710ce42db75aa5281a6b52a547efee10568cc2ed80605a
   sentry-ruby (7.0.0) sha256=e9616ff521355a983fad404ca575d8bb1f1949a8cac42a7a893dd02156bcdb1a
   shoulda-matchers (7.0.1) sha256=b4bfd8744c10e0a36c8ac1a687f921ee7e25ed529e50488d61b79a8688749c77
+  simplecov (1.2.0) sha256=ea6acd05eece5a41990e2a5171c57d15700d329326c7666c85ee8c6a0dd0977e
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   timeout (0.6.1) sha256=78f57368a7e7bbadec56971f78a3f5ecbcfb59b7fcbb0a3ed6ddc08a5094accb
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f

@@ -29,6 +29,8 @@ cd backend && EDITOR="code --wait" bin/rails credentials:edit
 RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
 ```
 
+**Exemple concret dans ce boilerplate** : le secret qui signe les JWT (`devise_jwt_secret_key`) vit dans `backend/config/credentials.yml.enc` — c'est la source canonique, lue en premier (`config/initializers/devise.rb`). La variable d'env `DEVISE_JWT_SECRET_KEY` (`.env.example`) n'est qu'un fallback pratique pour un développeur qui n'a pas encore le `master.key` de l'équipe ; elle ne doit jamais contenir la vraie valeur de prod. En clonant ce repo, un nouveau développeur a deux options : récupérer le `master.key` partagé par l'équipe (accès aux vrais credentials), ou tourner en local avec son propre `DEVISE_JWT_SECRET_KEY` généré via `bin/rails secret`.
+
 ## Scans automatisés (CI)
 
 - **Brakeman** : analyse statique de sécurité pour Rails (détecte SQL injection, XSS, mass assignment non protégé, etc.). Lancé à chaque push/PR dans `ci.yml`.

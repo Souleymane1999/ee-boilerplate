@@ -1,8 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * Theme tokens mirror design-system/colors_and_type.css (the Delta Force /
+ * iFutur design system). Keep these two files in sync by hand — the design
+ * system is a separate Vue/Nuxt app, not a build-time dependency of this
+ * React frontend, so there's no automatic sharing. See ../DESIGN.md.
+ */
+@theme {
+  --color-brand-lime: #bbcb44;
+  --color-brand-lime-50: #f9fbec;
+  --color-brand-lime-100: #f2f6d6;
+  --color-brand-lime-200: #e4ecaa;
+  --color-brand-lime-500: #c6d45c;
+  --color-brand-lime-600: #a3b339;
+  --color-brand-lime-700: #889732;
+
+  --color-brand-ink: #0e1110;
+  --color-brand-ink-2: #1a1d1f;
+
+  /* Overrides Tailwind's default neutral scale with the design system's
+     warm-cool slate, calibrated to sit next to the lime brand color. */
+  --color-neutral-0: #ffffff;
+  --color-neutral-25: #fafaf8;
+  --color-neutral-50: #f4f4f1;
+  --color-neutral-100: #ecece7;
+  --color-neutral-200: #ddddd6;
+  --color-neutral-300: #c5c5bc;
+  --color-neutral-400: #9a9a90;
+  --color-neutral-500: #6f6f66;
+  --color-neutral-600: #525249;
+  --color-neutral-700: #36362f;
+  --color-neutral-800: #22221d;
+  --color-neutral-900: #131310;
+
+  --color-success: #2f8f4f;
+  --color-success-bg: #e6f4ea;
+  --color-warning: #c2841a;
+  --color-warning-bg: #fcf3dd;
+  --color-danger: #c8362d;
+  --color-danger-bg: #fbe7e5;
+  --color-info: #2c6db5;
+  --color-info-bg: #e5eff9;
+
+  --font-sans:
+    "Open Sans", system-ui, -apple-system, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Consolas, Menlo, monospace;
+
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+/*
+ * The design system is light-first (see design-system/README.md), so this
+ * frontend is too — no `color-scheme: light dark`. Without an explicit
+ * background, the browser's dark-mode canvas makes brand-ink text
+ * (near-black) invisible against a black page background.
+ */
 :root {
-  color-scheme: light dark;
-  font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-neutral-25);
+  color: var(--color-brand-ink);
 }
