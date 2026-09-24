@@ -36,6 +36,9 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/backend_test
+      # Secret de test uniquement (pas de RAILS_MASTER_KEY en CI) — voir
+      # config/initializers/devise.rb, fallback ENV pour jwt.secret.
+      DEVISE_JWT_SECRET_KEY: ci_test_only_secret_not_for_production
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
