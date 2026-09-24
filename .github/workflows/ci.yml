@@ -67,7 +67,7 @@ jobs:
           ruby-version: "3.2.2"
           bundler-cache: true
       - name: Brakeman (static security analysis)
-        run: bundle exec brakeman --no-pager
+        run: bundle exec brakeman --no-pager -i config/brakeman.ignore
       - name: bundler-audit (known CVEs in gems)
         run: |
           bundle exec bundler-audit check --update

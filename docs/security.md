@@ -33,7 +33,7 @@ RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
 
 ## Scans automatisés (CI)
 
-- **Brakeman** : analyse statique de sécurité pour Rails (détecte SQL injection, XSS, mass assignment non protégé, etc.). Lancé à chaque push/PR dans `ci.yml`.
+- **Brakeman** : analyse statique de sécurité pour Rails (détecte SQL injection, XSS, mass assignment non protégé, etc.). Lancé à chaque push/PR dans `ci.yml`. Deux findings "Unmaintained Dependency" (Ruby 3.2.2, Rails 7.2.3.2 hors fenêtre de support) sont volontairement ignorés via `config/brakeman.ignore`, chacun avec une note expliquant pourquoi — ce ne sont pas des vulnérabilités de code, mais un rappel qu'un upgrade majeur est à planifier (le bump Dependabot Rails 8.1 casse déjà la suite de tests, donc pas un chantier à faire dans l'urgence).
 - **bundler-audit** : vérifie les gems du `Gemfile.lock` contre la base CVE connue.
 - **yarn audit** : vérifie les dépendances JS (Tailwind CLI, esbuild) contre les vulnérabilités connues.
 - **Dependabot** (`.github/dependabot.yml`) : ouvre automatiquement des PRs hebdomadaires pour mettre à jour les dépendances (bundler, yarn, GitHub Actions) — y compris les correctifs de sécurité.
