@@ -5,11 +5,13 @@ Le guide complet (convention de commits, process de PR/review, style de code, co
 Résumé rapide :
 
 ```bash
+bundle install && yarn install
 cp .env.example .env
-docker-compose up
+bin/rails db:prepare
+bin/dev
 ```
 
 - App : http://localhost:3000
-- Tests : `docker-compose exec app bundle exec rspec`
+- Tests : `bundle exec rspec`
 
 Commits au format [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, ...). CI (lint + tests + build + scans sécurité) doit être verte avant tout merge.

@@ -32,8 +32,8 @@ L'authentification web (Devise) repose sur des sessions/cookies signés côté s
 
 ### Base de données (PostgreSQL)
 - Une seule source de vérité pour les données persistées.
-- En développement, tourne dans le conteneur `postgres` de `docker-compose.yml`.
-- En production, utiliser un service managé (RDS, Cloud SQL, etc.) — voir `docs/runbook.md`.
+- En développement, tourne en local (Postgres.app, Homebrew, ou équivalent) — pas de Docker, voir "Pourquoi pas Docker ?" dans le `README.md`.
+- En production, utiliser un service managé (Heroku Postgres, RDS, etc.) — voir `docs/runbook.md`.
 
 ## Flux de la donnée
 

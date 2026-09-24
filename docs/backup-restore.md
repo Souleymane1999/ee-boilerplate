@@ -37,7 +37,7 @@ Restaure un dump donné en argument vers la base cible.
 
 ## Procédure de test de restauration (à exécuter trimestriellement)
 
-1. Provisionner une base PostgreSQL temporaire (ex. `docker run postgres` isolé, ou une instance staging dédiée).
+1. Provisionner une base PostgreSQL temporaire (nouvelle base locale, ou une instance staging dédiée).
 2. Récupérer le backup le plus récent depuis le stockage distant.
 3. Lancer `scripts/restore.sh <dump>` en pointant `DATABASE_URL` vers cette base temporaire.
 4. Vérifier :

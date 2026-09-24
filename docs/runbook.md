@@ -7,13 +7,13 @@
 - `RAILS_MASTER_KEY` disponible côté environnement de déploiement.
 - Migrations de base de données revues (pas de migration destructive non réversible sans plan de rollback).
 
-### Étapes types (à adapter à votre plateforme : Render, Fly.io, Heroku, ECS, Kubernetes...)
+### Étapes types (plateforme type Heroku, pilotée par `Procfile` — pas de Docker, même pattern que les autres projets de l'équipe)
 
 1. CI verte sur la branche/PR à déployer (`ci.yml` : lint, tests, build des assets, scans sécurité).
-2. Build de l'image (`Dockerfile.production` — inclut la compilation Tailwind CSS + esbuild JS via `assets:precompile`) ou build de la plateforme.
+2. Push vers la plateforme — son buildpack installe les gems/deps JS et lance `assets:precompile` (compile Tailwind CSS + esbuild JS).
 3. Déploiement de l'app :
-   - `bin/rails db:migrate` (idéalement dans un job de pré-déploiement, pas dans le process web).
-   - Démarrage des nouvelles instances, health check sur `/up` avant bascule du trafic.
+   - Phase `release` du `Procfile` (`bundle exec rake db:migrate`) — migrations appliquées avant le basculement du trafic, jamais dans le process `web`.
+   - Démarrage des nouvelles instances (`web: bundle exec puma -C config/puma.rb`), health check sur `/up` avant bascule du trafic.
 4. Vérification post-déploiement (smoke test) :
    - `GET /up` répond 200.
    - Un parcours critique fonctionne (ex. login, lecture d'une ressource clé).
@@ -41,23 +41,20 @@
 ## Voir les logs en production
 
 - Logs applicatifs structurés en JSON (via `lograge`) — consulter via l'agrégateur branché (CloudWatch, Datadog Logs, etc., voir `docs/observability.md`).
-- En attendant qu'un agrégateur soit branché : `docker compose logs -f backend` en local, ou la commande équivalente de la plateforme (`heroku logs --tail`, `kubectl logs -f <pod>`, etc.) en prod.
+- En attendant qu'un agrégateur soit branché : la commande de logs de la plateforme (`heroku logs --tail` ou équivalent) en prod.
 - Toujours filtrer/chercher par `request_id` pour suivre une requête de bout en bout.
 
 ## Commandes utiles
 
 ```bash
-# Lancer l'environnement complet
-docker-compose up
+# Lancer l'environnement complet (local)
+bin/dev
 
 # Lancer les migrations
-docker-compose exec app bin/rails db:migrate
+bin/rails db:migrate
 
 # Ouvrir une console Rails
-docker-compose exec app bin/rails console
-
-# Voir les logs backend en direct
-docker-compose logs -f backend
+bin/rails console
 
 # Lancer un backup manuel
 ./scripts/backup.sh

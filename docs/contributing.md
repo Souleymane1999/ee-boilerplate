@@ -3,22 +3,22 @@
 ## Lancer le projet localement
 
 ```bash
+bundle install && yarn install
 cp .env.example .env
-# éditer .env si besoin (valeurs par défaut fonctionnelles pour le dev local)
-docker-compose up
+# éditer .env si votre PostgreSQL local diffère des valeurs par défaut
+bin/rails db:prepare
+bin/dev
 ```
 
 - App : http://localhost:3000 (health check sur `/up`)
 
-Première fois : voir la section "Quickstart" du `README.md` racine pour la création de la base de données.
+Pas de Docker — même pattern que les autres projets Rails de l'équipe (voir "Pourquoi pas Docker ?" dans le `README.md` racine). Nécessite Ruby 3.2.2, Node 20 et PostgreSQL installés localement.
 
 ## Lancer les tests localement
 
 ```bash
-docker-compose exec app bundle exec rspec
+bundle exec rspec
 ```
-
-Ou sans Docker, directement à la racine du repo avec Ruby/Node installés localement (`bundle exec rspec`).
 
 ## Style de code
 

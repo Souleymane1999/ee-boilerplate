@@ -17,44 +17,33 @@ Boilerplate de départ pour tout nouveau projet de l'équipe : **une seule app R
 ## Quickstart
 
 ### Prérequis
-- Docker et docker-compose installés (ou Ruby 3.2.2 + Node 20 + PostgreSQL en local)
+- Ruby 3.2.2, Node 20, PostgreSQL en local (même pattern que les autres projets de l'équipe — pas de Docker, voir [pourquoi](#pourquoi-pas-docker))
 
 ### Démarrer
 
 ```bash
-cp .env.example .env
-docker-compose up
-```
-
-- App : http://localhost:3000 — health check : `GET /up`
-- PostgreSQL : localhost:5432
-- Design system (référence, Nuxt) : http://localhost:4000 — voir [`design-system/README.md`](design-system/README.md#démarrer), pas lancé par `docker-compose up`
-
-Le premier démarrage exécute automatiquement les migrations (`db:prepare`).
-
-### Sans Docker (dev local direct)
-
-```bash
 bundle install
 yarn install
-cp .env.example .env   # ou configurer DATABASE_URL directement
+cp .env.example .env   # ajuster DATABASE_URL si votre Postgres local diffère
 bin/rails db:prepare
 bin/dev
 ```
 
 `bin/dev` lance en parallèle (via foreman) : le serveur Rails, le watcher Tailwind CSS, et le watcher esbuild JS — un seul terminal, tout se recharge en live.
 
+- App : http://localhost:3000 — health check : `GET /up`
+- Design system (référence, Nuxt) : http://localhost:4000 — voir [`design-system/README.md`](design-system/README.md#démarrer), à démarrer séparément
+
 ### Lancer les tests
 
 ```bash
-docker-compose exec app bundle exec rspec
-# ou en local : bundle exec rspec
+bundle exec rspec
 ```
 
 ### Lint
 
 ```bash
-docker-compose exec app bundle exec rubocop
+bundle exec rubocop
 ```
 
 ### Ajouter une feature
@@ -65,6 +54,10 @@ docker-compose exec app bundle exec rubocop
 4. Ouvrir une PR — la CI doit être verte avant merge.
 
 Détails complets : [`docs/contributing.md`](docs/contributing.md).
+
+## Pourquoi pas Docker ?
+
+Aucun des 3 projets Rails réels de l'équipe (ipay-money-app, financial-ipay, i-money-app) n'utilise Docker — les 3 tournent sur une plateforme type Heroku, pilotée par un `Procfile` (`web: bundle exec puma -C config/puma.rb`, `release: bundle exec rake db:migrate`). Ce boilerplate suit le même pattern plutôt que d'introduire un outil que l'équipe n'utilise nulle part ailleurs : `Procfile` à la racine pour la plateforme d'hébergement, `Procfile.dev` (déjà présent) pour `bin/dev` en local.
 
 ## Arborescence
 
@@ -80,7 +73,8 @@ ee-boilerplate/
 ├── config/                  # Routes, initializers, credentials chiffrées
 ├── spec/                    # RSpec (specs de requête, modèles)
 ├── bin/dev                  # Lance web + css watcher + js watcher (foreman)
-├── Procfile.dev
+├── Procfile.dev              # bin/dev (web + css watch + js watch)
+├── Procfile                  # web + release, pour la plateforme d'hébergement (pas de Docker)
 ├── Gemfile / package.json   # Dépendances Ruby / JS
 ├── design-system/          # Design system de référence de l'équipe (Delta Force / iFutur), app Nuxt
 ├── docs/                   # Documentation (architecture, observabilité, sécurité, runbook...)
@@ -89,7 +83,6 @@ ee-boilerplate/
 ├── .github/
 │   ├── workflows/ci.yml    # Lint + tests + build assets + scans sécurité
 │   └── dependabot.yml      # Mises à jour hebdomadaires (bundler, yarn, actions)
-├── docker-compose.yml       # postgres + app (un seul service applicatif)
 ├── .env.example
 ├── DESIGN.md                 # TailwindCSS ↔ tokens du design system
 └── README.md                 # ce fichier
