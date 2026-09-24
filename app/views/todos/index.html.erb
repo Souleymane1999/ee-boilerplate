@@ -1,0 +1,17 @@
+<% content_for :title, "Tâches — EE Boilerplate" %>
+
+<%= render layout: "shared/app_shell", locals: { active: :todos } do %>
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-lg font-semibold text-brand-ink">Tâches</h1>
+    <%= link_to "Nouvelle tâche", new_todo_path,
+          class: "rounded-md bg-brand-lime px-3 py-2 text-sm font-semibold text-brand-ink hover:bg-brand-lime-600" %>
+  </div>
+
+  <% if @todos.any? %>
+    <div class="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xs">
+      <%= render @todos %>
+    </div>
+  <% else %>
+    <p class="text-sm text-neutral-500">Aucune tâche pour l'instant.</p>
+  <% end %>
+<% end %>

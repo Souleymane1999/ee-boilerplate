@@ -1,67 +1,27 @@
 <% content_for :title, "Tableau de bord — EE Boilerplate" %>
 
-<div class="flex min-h-screen flex-col bg-neutral-25 md:flex-row">
-  <aside class="hidden w-64 shrink-0 flex-col justify-between border-r border-neutral-200 bg-white md:flex">
-    <div>
-      <div class="flex items-center px-6 py-6">
-        <%= image_tag "ifutur-logo.png", alt: "iFutur", class: "h-7 w-auto" %>
-      </div>
-      <nav class="flex flex-col gap-1 px-3">
-        <a href="<%= dashboard_path %>" class="flex items-center gap-3 rounded-md bg-brand-lime-100 px-3 py-2.5 text-sm font-semibold text-brand-lime-700">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 shrink-0">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-          </svg>
-          Tableau de bord
-        </a>
-      </nav>
+<%= render layout: "shared/app_shell", locals: { active: :dashboard } do %>
+  <div class="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xs">
+    <div class="flex items-center gap-3 border-b border-neutral-100 px-6 py-4">
+      <span class="flex h-9 w-9 items-center justify-center rounded-full bg-success-bg text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+        </svg>
+      </span>
+      <h1 class="text-lg font-semibold text-brand-ink">Statut de l'application</h1>
     </div>
 
-    <div class="border-t border-neutral-200 px-4 py-4">
-      <div class="flex items-center gap-3 px-2 py-2">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-lime text-sm font-semibold text-brand-ink">
-          <%= current_user.email.first.upcase %>
+    <div class="flex items-center justify-between px-6 py-5">
+      <% if @database_connected %>
+        <span class="inline-flex items-center rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-success">
+          Base de données connectée
         </span>
-        <span class="min-w-0 flex-1 truncate text-sm text-neutral-600"><%= current_user.email %></span>
-      </div>
-      <%= button_to "Se déconnecter", destroy_user_session_path, method: :delete,
-            class: "mt-2 w-full cursor-pointer rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50" %>
+      <% else %>
+        <span class="inline-flex items-center rounded-full bg-danger-bg px-3 py-1 text-sm font-semibold text-danger">
+          Base de données indisponible
+        </span>
+      <% end %>
+      <code class="rounded bg-neutral-100 px-2 py-1 font-mono text-xs text-neutral-600"><%= rails_health_check_path %></code>
     </div>
-  </aside>
-
-  <header class="flex items-center justify-between border-b border-neutral-200 bg-white px-4 py-3 md:hidden">
-    <%= image_tag "ifutur-logo.png", alt: "iFutur", class: "h-6 w-auto" %>
-    <div class="flex items-center gap-3">
-      <span class="text-sm text-neutral-500"><%= current_user.email %></span>
-      <%= button_to "Se déconnecter", destroy_user_session_path, method: :delete,
-            class: "cursor-pointer rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-xs hover:bg-neutral-50" %>
-    </div>
-  </header>
-
-  <main class="flex-1 px-4 py-10 md:px-10">
-    <div class="mx-auto max-w-3xl">
-      <div class="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xs">
-        <div class="flex items-center gap-3 border-b border-neutral-100 px-6 py-4">
-          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-success-bg text-success">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
-            </svg>
-          </span>
-          <h1 class="text-lg font-semibold text-brand-ink">Statut de l'application</h1>
-        </div>
-
-        <div class="flex items-center justify-between px-6 py-5">
-          <% if @database_connected %>
-            <span class="inline-flex items-center rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-success">
-              Base de données connectée
-            </span>
-          <% else %>
-            <span class="inline-flex items-center rounded-full bg-danger-bg px-3 py-1 text-sm font-semibold text-danger">
-              Base de données indisponible
-            </span>
-          <% end %>
-          <code class="rounded bg-neutral-100 px-2 py-1 font-mono text-xs text-neutral-600"><%= rails_health_check_path %></code>
-        </div>
-      </div>
-    </div>
-  </main>
-</div>
+  </div>
+<% end %>

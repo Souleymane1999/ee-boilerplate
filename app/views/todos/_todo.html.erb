@@ -1,0 +1,16 @@
+<div class="flex items-center justify-between border-b border-neutral-100 px-6 py-4 last:border-b-0">
+  <div class="flex items-center gap-3">
+    <% if todo.done %>
+      <span class="inline-flex items-center rounded-full bg-success-bg px-2.5 py-0.5 text-xs font-semibold text-success">Faite</span>
+    <% else %>
+      <span class="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-semibold text-neutral-600">À faire</span>
+    <% end %>
+    <%= link_to todo.title, todo, class: "text-sm font-medium text-brand-ink hover:underline" %>
+  </div>
+  <div class="flex items-center gap-3">
+    <%= link_to "Modifier", edit_todo_path(todo), class: "text-sm text-neutral-500 hover:text-brand-ink" %>
+    <%= button_to "Supprimer", todo, method: :delete,
+          class: "cursor-pointer text-sm text-danger hover:underline",
+          data: { turbo_confirm: "Supprimer cette tâche ?" } %>
+  </div>
+</div>

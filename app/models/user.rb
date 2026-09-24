@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
+  has_many :todos, dependent: :destroy
+
   before_create { self.jti = SecureRandom.uuid }
 
   # Include default devise modules. Others available are:
