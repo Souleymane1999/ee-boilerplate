@@ -18,7 +18,7 @@ Ce boilerplate suit une architecture **monolithe Rails server-rendered**, sans f
            └──────────────────┘
 ```
 
-Pas d'API JSON séparée à sécuriser, pas de CORS, pas de token à transporter côté client : l'authentification (Devise) repose sur des sessions/cookies signés côté serveur, comme n'importe quelle app Rails classique.
+L'authentification web (Devise) repose sur des sessions/cookies signés côté serveur — pas de CORS, pas de token à transporter côté client pour naviguer le site. Un petit namespace JSON (`/api/v1`, JWT) existe en plus pour un futur client mobile — voir `docs/adr/0002-auth-sessions-and-jwt.md`.
 
 ## Composants
 
@@ -26,8 +26,8 @@ Pas d'API JSON séparée à sécuriser, pas de CORS, pas de token à transporter
 - Rails 7.2 classique (vues activées, asset pipeline via Propshaft).
 - **TailwindCSS v4** compilé par `cssbundling-rails` (CLI Tailwind), **esbuild** pour le JS via `jsbundling-rails` — voir `DESIGN.md`.
 - **Hotwire** (Turbo + Stimulus) pour la navigation et l'interactivité sans recharger toute la page, sans construire une SPA.
-- **Devise** pour l'authentification par sessions.
-- Toute la logique métier, les vues et les règles d'autorisation vivent ici.
+- **Devise** (sessions web) + **devise-jwt** (API `/api/v1`, pour un futur client mobile).
+- **Pundit** (`app/policies/`) pour l'autorisation, **app/services/** pour la logique métier qui ne tient ni dans un modèle ni dans un controller — les deux conventions les plus systématiques trouvées dans les 3 apps Rails réelles de l'équipe (ipay-money-app, financial-ipay, i-money-app).
 - Accède à PostgreSQL via ActiveRecord.
 
 ### Base de données (PostgreSQL)

@@ -9,7 +9,8 @@ Boilerplate de départ pour tout nouveau projet de l'équipe : **une seule app R
 - **Rails 7.2** (vues serveur, pas API-only) + **PostgreSQL**
 - **TailwindCSS v4** via `cssbundling-rails`, tokens iFutur branchés (voir [`DESIGN.md`](DESIGN.md))
 - **Hotwire** (Turbo + Stimulus) pour l'interactivité sans SPA
-- **Devise** — authentification par sessions (cookies signés), pas de JWT ni d'API séparée à sécuriser
+- **Devise** — sessions (web) + **devise-jwt** (API `/api/v1` pour un futur client mobile)
+- **Pundit** (autorisation) + **app/services** (logique métier) — conventions communes aux 3 apps Rails réelles de l'équipe
 - **CI/CD** : GitHub Actions
 - **Observabilité** : Sentry + logs JSON structurés (lograge)
 
@@ -71,6 +72,9 @@ Détails complets : [`docs/contributing.md`](docs/contributing.md).
 ee-boilerplate/
 ├── app/                    # L'app Rails (controllers, models, vues)
 │   ├── views/devise/       # Vues Devise stylées (login, inscription...)
+│   ├── controllers/api/v1/ # API JSON (JWT) pour un futur client mobile
+│   ├── policies/           # Pundit — autorisation
+│   ├── services/           # Logique métier hors modèle/controller
 │   ├── assets/             # Tailwind (application.tailwind.css) + builds compilés
 │   └── javascript/         # Entrypoint esbuild (Turbo, Stimulus)
 ├── config/                  # Routes, initializers, credentials chiffrées
@@ -173,8 +177,8 @@ Légende : ✅ fait (déjà configuré ici) · 🔲 à faire par l'équipe proje
 |---|---|---|
 | Aucun secret dans le code | ✅ | `.gitignore` + vérifié manuellement (`master.key`, `.env` exclus) |
 | Secrets gérés par un système dédié | ✅ | Rails credentials chiffrées (voir `docs/security.md`) |
-| Permissions au moindre privilège | 🔲 | Pas de système de rôles métier — à concevoir selon le projet |
-| Accès sensibles protégés par rôles | 🔲 | Devise fournit l'authentification ; l'autorisation par rôle reste à ajouter (ex. Pundit) |
+| Permissions au moindre privilège | ✅ | Pundit (`app/policies/`) — exemple sur `DashboardPolicy`, à étendre par ressource |
+| Accès sensibles protégés par rôles | 🔲 | Pundit fournit le mécanisme ; les rôles métier eux-mêmes restent à concevoir selon le projet |
 | Dépendances analysées régulièrement | ✅ | Dependabot hebdomadaire + audits CI |
 | Vulnérabilités critiques suivies jusqu'à résolution | ✅ | PRs Dependabot + CI bloquante |
 | Accès importants journalisés | 🔲 | Lograge journalise les requêtes HTTP, pas un audit trail métier |

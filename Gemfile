@@ -45,8 +45,15 @@ gem "jsbundling-rails"
 # Load environment variables from .env in development
 gem "dotenv-rails", groups: [:development, :test]
 
-# Authentication — session-based (this is a server-rendered app, not an API)
+# Authentication — sessions for the web UI (Devise default) + JWT for a
+# future mobile/API client (same dual pattern as ipay-money-app,
+# financial-ipay and i-money-app — see docs/adr/0002-auth-sessions-and-jwt.md).
 gem "devise"
+gem "devise-jwt"
+
+# Authorization — used in 3/3 of the team's real Rails apps (ipay-money-app,
+# financial-ipay, i-money-app), always alongside app/policies/.
+gem "pundit"
 
 # Error tracking
 gem "sentry-ruby"

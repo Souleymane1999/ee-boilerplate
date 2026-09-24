@@ -17,6 +17,11 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+# No i18n setup in this boilerplate — flash/error strings are hardcoded in
+# French throughout the app by convention (see docs/contributing.md).
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 

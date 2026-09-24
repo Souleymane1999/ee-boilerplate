@@ -313,4 +313,28 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # ==> JWT (devise-jwt) — for a future mobile/API client, alongside the web
+  # sessions used by the browser UI. Scoped to /api/v1/* only: the web login
+  # at /users/sign_in is unaffected and keeps using plain sessions.
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key || ENV.fetch('DEVISE_JWT_SECRET_KEY', nil)
+    jwt.dispatch_requests = [
+      ['POST', %r{^/api/v1/login$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/api/v1/logout$}]
+    ]
+    jwt.expiration_time = 30.minutes.to_i
+  end
+
+  config.warden do |warden_config|
+    # devise-jwt registers the :jwt Warden strategy but does not wire it up
+    # automatically — without this, requests under /api/v1 with a Bearer
+    # token never get authenticated.
+    warden_config.default_strategies(scope: :user).unshift :jwt
+    # JSON 401 for /api/v1/*, HTML redirect for the web session login —
+    # see JsonOrHtmlFailureApp for why this can't just be one or the other.
+    warden_config.failure_app = JsonOrHtmlFailureApp
+  end
 end
