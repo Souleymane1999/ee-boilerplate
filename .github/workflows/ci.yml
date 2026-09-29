@@ -45,7 +45,7 @@ jobs:
         with:
           ruby-version: "3.2.2"
           bundler-cache: true
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
           cache: "yarn"
@@ -71,7 +71,7 @@ jobs:
       - name: bundler-audit (known CVEs in gems)
         run: |
           bundle exec bundler-audit check --update
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
           cache: "yarn"
