@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 7.2.3', '>= 7.2.3.2'
 # Pinned: json 3.x dropped the `quirks_mode` keyword that Rails 7.2's request
 # parser still passes to JSON.parse, causing every JSON request body to 500.
-gem 'json', '~> 2.7'
+gem 'json', '~> 3.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 # Use the Puma web server [https://github.com/puma/puma]
