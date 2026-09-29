@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.3', '>= 7.2.3.2'
+gem 'rails', '~> 8.1.4'
 # Pinned: json 3.x dropped the `quirks_mode` keyword that Rails 7.2's request
 # parser still passes to JSON.parse, causing every JSON request body to 500.
 gem 'json', '~> 2.7'
