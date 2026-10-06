@@ -6,7 +6,7 @@ gem 'rails', '~> 7.2.3', '>= 7.2.3.2'
 # parser still passes to JSON.parse, causing every JSON request body to 500.
 gem 'json', '~> 2.7'
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 1.7'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
